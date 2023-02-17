@@ -51,14 +51,4 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBrcQuRT2h7bOgmvCdpF_rArOQeSd8g_rI',
-    appId: '1:862013669196:web:a34cb97af5c631fe3e19e9',
-    messagingSenderId: '862013669196',
-    projectId: 'imvision-ads',
-    authDomain: 'imvision-ads.firebaseapp.com',
-    storageBucket: 'imvision-ads.appspot.com',
-    measurementId: 'G-WS3PC1DWCL',
-  );
 }
