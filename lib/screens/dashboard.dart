@@ -5,8 +5,11 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../models/status_model.dart';
+import '../widgets/content_ads.dart';
 import '../widgets/divider.dart';
 import '../widgets/shimmer.dart';
+import '../widgets/stepper_ads.dart';
+import '../widgets/stepper_ads.dart';
 import '../widgets/stepper_custom.dart' as stepperCustom;
 
 class DashboardScreen extends StatefulWidget {
@@ -25,14 +28,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String classification = '';
   String video = '';
   String image = '';
-  double _value = 100.0;
   bool hide = false;
 
   final textStyleTitle =
       const TextStyle(color: Colors.black, fontWeight: FontWeight.bold);
   @override
   Widget build(BuildContext context) {
+    bool classificationDone = false;
+    bool classificationInprocess = false;
+    bool adsDone = false;
+    bool adsInprocess = false;
+    bool downloadDone = false;
+    bool downloadInprocess = false;
     return Scaffold(
+      backgroundColor: Colors.grey.shade50,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -45,19 +54,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Center(
                 child: Container(
                   alignment: Alignment.centerRight,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          opacity: 0.8,
-                          image: AssetImage('assets/images/bg_vin.png'))),
+                  // decoration: const BoxDecoration(
+                  //     image: DecorationImage(
+                  //         fit: BoxFit.cover,
+                  //         opacity: 0.8,
+                  //         image: AssetImage('assets/images/bg_vin.png'))),
                   child: TextField(
                     controller: textControllerVin,
                     inputFormatters: [LengthLimitingTextInputFormatter(17)],
                     decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.redAccent, width: 0.0),
-                      ),
+                      // enabledBorder: OutlineInputBorder(
+                      //   borderSide:
+                      //       BorderSide(color: Colors.redAccent, width: 0.0),
+                      // ),
                       border: OutlineInputBorder(),
                       labelText: 'Enter your VIN',
                     ),
@@ -96,8 +105,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Text("Loading");
                     }
+
                     try {
                       final currentStatus = snapshot.data?.data();
+                      classificationDone = false;
+                      classificationInprocess = false;
+                      adsDone = false;
+                      adsInprocess = false;
+                      downloadDone = false;
+                      downloadInprocess = false;
+                      if (currentStatus!.classification == 'done') {
+                        classificationDone = true;
+                        classificationInprocess = false;
+                      }
+                      if (currentStatus.classification == 'in-process') {
+                        classificationDone = false;
+                        classificationInprocess = true;
+                      }
+                      if (currentStatus.video == 'done') {
+                        adsDone = true;
+                        adsInprocess = false;
+                      }
+                      if (currentStatus.video == 'in-process') {
+                        adsDone = false;
+                        adsInprocess = true;
+                      }
+                      if (currentStatus.download == 'done') {
+                        downloadDone = true;
+                        downloadInprocess = false;
+                      }
+                      if (currentStatus.download == 'in-process') {
+                        downloadDone = false;
+                        downloadInprocess = true;
+                      }
                       return Theme(
                         data: ThemeData(
                             primaryColor: Colors.red,
@@ -107,15 +147,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             borderRadius: BorderRadius.all(
                               Radius.circular((3)),
                             ),
-                            // gradient: LinearGradient(
-                            //     colors: [
-                            //       Color(0xFF00c6ff),
-                            //       Color(0xFF0072ff),
-                            //     ],
-                            //     begin: FractionalOffset(0.0, 0.0),
-                            //     end: FractionalOffset(1.0, 1.00),
-                            //     stops: [0.0, 1.0],
-                            //     tileMode: TileMode.clamp),
                           ),
                           child: stepperCustom.ModifiedStepper(
                               controlsBuilder: (BuildContext buildContext,
@@ -129,32 +160,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               },
                               steps: [
                                 stepperCustom.ModifiedStep(
-                                    state:
-                                        currentStatus!.download == 'in-process'
-                                            ? stepperCustom.StepState.editing
-                                            : stepperCustom.StepState.complete,
+                                    state: downloadInprocess
+                                        ? stepperCustom.StepState.editing
+                                        : stepperCustom.StepState.complete,
                                     title: Row(
                                       children: [
                                         Text(
                                           'Download',
                                           style: textStyleTitle,
                                         ),
-                                        if (currentStatus.download == 'done')
+                                        if (downloadDone)
                                           const SizedBox(
                                             width: 20,
                                           ),
-                                        if (currentStatus.download == 'done')
+                                        if (downloadDone)
                                           const Icon(
                                             Icons.check_circle_outline_outlined,
                                             color: Colors.white,
                                           ),
-                                        if (currentStatus.download ==
-                                            'in-process')
+                                        if (downloadInprocess)
                                           const SizedBox(
                                             width: 100,
                                           ),
-                                        if (currentStatus.download ==
-                                            'in-process')
+                                        if (downloadInprocess)
                                           LoadingAnimationWidget.newtonCradle(
                                             color: const Color.fromARGB(
                                                 255, 255, 255, 255),
@@ -179,14 +207,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     )),
                                 if (currentStatus.classification == 'idle')
                                   stepperCustom.ModifiedStep(
-                                      state: currentStatus.classification ==
-                                              'in-process'
+                                      state: classificationInprocess
                                           ? stepperCustom.StepState.editing
                                           : stepperCustom.StepState.complete,
                                       title: Row(
-                                        mainAxisAlignment: currentStatus
-                                                    .classification ==
-                                                'done'
+                                        mainAxisAlignment: classificationDone
                                             ? MainAxisAlignment.start
                                             : MainAxisAlignment.spaceBetween,
                                         children: [
@@ -194,25 +219,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             'Classification',
                                             style: textStyleTitle,
                                           ),
-                                          if (currentStatus.classification ==
-                                              'done')
+                                          if (classificationDone)
                                             const SizedBox(
                                               width: 20,
                                             ),
-                                          if (currentStatus.classification ==
-                                              'done')
+                                          if (classificationDone)
                                             const Icon(
                                               Icons
                                                   .check_circle_outline_outlined,
                                               color: Colors.white,
                                             ),
-                                          if (currentStatus.classification ==
-                                              'in-process')
+                                          if (classificationInprocess)
                                             const SizedBox(
                                               width: 100,
                                             ),
-                                          if (currentStatus.classification ==
-                                              'in-process')
+                                          if (classificationInprocess)
                                             LoadingAnimationWidget.newtonCradle(
                                               color: const Color.fromARGB(
                                                   255, 255, 255, 255),
@@ -234,6 +255,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           // if (currentStatus.classification ==
                                           //     'in-process')
                                           ShimmerCustom(),
+                                          // if(currentStatus.classification ==
+                                          //     'done')
                                           // Row(
                                           //   children: [
                                           //     ListView(
@@ -339,72 +362,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           ShimmerCustom(),
                                         ],
                                       )),
-                                if (currentStatus.video == 'idle')
-                                  stepperCustom.ModifiedStep(
-                                    state: currentStatus.video == 'in-process'
-                                        ? stepperCustom.StepState.editing
-                                        : stepperCustom.StepState.complete,
-                                    title: Row(
-                                      children: [
-                                        Text(
-                                          'Ads',
-                                          style: textStyleTitle,
+                                // if (currentStatus.video == 'idle')
+                                stepperCustom.ModifiedStep(
+                                  state: adsInprocess
+                                      ? stepperCustom.StepState.editing
+                                      : stepperCustom.StepState.complete,
+                                  title: Row(
+                                    children: [
+                                      Text(
+                                        'Ads',
+                                        style: textStyleTitle,
+                                      ),
+                                      if (adsDone)
+                                        const SizedBox(
+                                          width: 20,
                                         ),
-                                        if (currentStatus.video == 'done')
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                        if (currentStatus.video == 'done')
-                                          const Icon(
-                                            Icons.check_circle_outline_outlined,
-                                            color: Colors.white,
-                                          ),
-                                        if (currentStatus.video == 'in-process')
-                                          const SizedBox(
-                                            width: 100,
-                                          ),
-                                        if (currentStatus.video == 'in-process')
-                                          LoadingAnimationWidget.newtonCradle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            size: 100,
-                                          ),
-                                      ],
-                                    ),
-                                    content: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Video',
-                                          style: textStyleTitle,
+                                      if (adsDone)
+                                        const Icon(
+                                          Icons.check_circle_outline_outlined,
+                                          color: Colors.white,
                                         ),
-                                        SizedBox(
-                                          height: 10,
+                                      if (adsInprocess)
+                                        const SizedBox(
+                                          width: 100,
                                         ),
-                                        ShimmerCustom(),
-                                        DividerCustom(),
-                                        Text(
-                                          'Gif',
-                                          style: textStyleTitle,
+                                      if (adsInprocess)
+                                        LoadingAnimationWidget.newtonCradle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          size: 100,
                                         ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        ShimmerCustom(),
-                                        DividerCustom(),
-                                        Text(
-                                          'Image',
-                                          style: textStyleTitle,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        ShimmerCustom(),
-                                        DividerCustom(),
-                                      ],
-                                    ),
+                                    ],
                                   ),
+                                  content: ContentAds(),
+
+                                  // widgetStepperAds(
+                                  //     adsInprocess, adsDone, context, documentId)
+                                )
                               ]),
                         ),
                       );
