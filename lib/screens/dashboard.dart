@@ -2,15 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shimmer/shimmer.dart';
 
+import '../constants/global_constants.dart';
 import '../models/status_model.dart';
-import '../widgets/content_ads.dart';
-import '../widgets/content_classification.dart';
-import '../widgets/shimmer.dart';
 // ignore: library_prefixes
-import '../widgets/stepper_custom.dart' as stepperCustom;
+import '../widgets/stepper.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,7 +16,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  String documentId = '1FT6W1EV5PWG07389_C99';
+  String documentId = '1FMCU9G62LUB64553_1676971001985';
   final textControllerVin = TextEditingController();
   bool isSubmitVinSuccess = false;
   late Stream<DocumentSnapshot<Status>> documentStream;
@@ -75,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       //     '${textControllerVin.text}_${DateTime.now().millisecondsSinceEpoch}';
 
                       try {
-                        // final responseData = submitVin(documentId);
+                        // final responseData = await submitVin(documentId);
                         // if (responseData) {
                         setState(() {
                           isSubmitVinSuccess = true;
@@ -108,11 +104,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     if (snapshot.hasError) {
                       return const Text('Something went wrong');
                     }
-
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Text("Loading");
                     }
-
                     try {
                       final currentStatus = snapshot.data?.data();
                       classificationDone = false;
@@ -125,7 +119,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         classificationDone = true;
                         classificationInprogress = false;
                       }
-                      if (currentStatus.classification == 'in-process') {
+                      if (currentStatus.classification == 'processing') {
                         classificationDone = false;
                         classificationInprogress = true;
                       }
@@ -133,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         adsDone = true;
                         adsInprogress = false;
                       }
-                      if (currentStatus.video == 'in-process') {
+                      if (currentStatus.video == 'processing') {
                         adsDone = false;
                         adsInprogress = true;
                       }
@@ -141,164 +135,91 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         downloadDone = true;
                         downloadInprocess = false;
                       }
-                      if (currentStatus.download == 'in-process') {
+                      if (currentStatus.download == 'processing') {
                         downloadDone = false;
                         downloadInprocess = true;
                       }
-                      return Theme(
-                        data: ThemeData(
-                            primaryColor: Colors.red,
-                            canvasColor: Colors.lightBlue),
-                        child: Container(
+                      return Container(
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(
                               Radius.circular((3)),
                             ),
                           ),
-                          child: stepperCustom.ModifiedStepper(
-                              controlsBuilder: (BuildContext buildContext,
-                                  stepperCustom.ControlsDetails
-                                      controlsDetails) {
-                                return Row(
-                                  children: <Widget>[
-                                    Container(),
-                                  ],
-                                );
-                              },
-                              steps: [
-                                stepperCustom.ModifiedStep(
-                                    state: downloadInprocess
-                                        ? stepperCustom.StepState.editing
-                                        : downloadDone
-                                            ? stepperCustom.StepState.complete
-                                            : stepperCustom.StepState.indexed,
-                                    title: Row(
-                                      children: [
-                                        Text(
-                                          'Download',
-                                          style: textStyleTitle,
-                                        ),
-                                        if (downloadDone)
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                        if (downloadDone)
-                                          const Icon(
-                                            Icons.check_circle_outline_outlined,
-                                            color: Colors.white,
-                                          ),
-                                        if (downloadInprocess)
-                                          const SizedBox(
-                                            width: 100,
-                                          ),
-                                        if (downloadInprocess)
-                                          LoadingAnimationWidget.newtonCradle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            size: 100,
-                                          ),
-                                      ],
-                                    ),
-                                    content: Column(
-                                      children: [
-                                        Shimmer.fromColors(
-                                          baseColor:
-                                              ColorsCustom.primary.shade50,
-                                          highlightColor: ColorsCustom
-                                              .primary.shade100
-                                              .withOpacity(0.3),
-                                          child: Container(
-                                            color: Colors.black12,
-                                            child: const Text('Hello'),
-                                          ),
-                                        )
-                                      ],
-                                    )),
+                          child: Column(
+                            children: [
+                              StepperCustom(
+                                title: GlobalText.titleDownload,
+                                isDone: downloadDone,
+                                isInprocess: downloadInprocess,
+                                vinId: documentId,
+                                isDownloadWidget: true,
+                              ),
+                              StepperCustom(
+                                title: GlobalText.titleClassification,
+                                isDone: classificationDone,
+                                isInprocess: classificationInprogress,
+                                vinId: documentId,
+                                isClassificationWidget: true,
+                              ),
+                              StepperCustom(
+                                title: GlobalText.titleAds,
+                                isDone: adsDone,
+                                isInprocess: adsInprogress,
+                                vinId: documentId,
+                                isAdsWidget: true,
+                              ),
+                            ],
+                          ));
 
-                                /// Enable when backend done
-                                // if (classificationInprogress ||
-                                //     classificationDone)
-                                stepperCustom.ModifiedStep(
-                                    state: classificationInprogress
-                                        ? stepperCustom.StepState.editing
-                                        : classificationDone
-                                            ? stepperCustom.StepState.complete
-                                            : stepperCustom.StepState.indexed,
-                                    title: Row(
-                                      mainAxisAlignment: classificationDone
-                                          ? MainAxisAlignment.start
-                                          : MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Classification',
-                                          style: textStyleTitle,
-                                        ),
-                                        if (classificationDone)
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                        if (classificationDone)
-                                          const Icon(
-                                            Icons.check_circle_outline_outlined,
-                                            color: Colors.white,
-                                          ),
-                                        if (classificationInprogress)
-                                          const SizedBox(
-                                            width: 100,
-                                          ),
-                                        if (classificationInprogress)
-                                          LoadingAnimationWidget.newtonCradle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            size: 100,
-                                          ),
-                                      ],
-                                    ),
-                                    content: ContentClassification(
-                                      idVin: documentId,
-                                    )),
+                      //  stepperCustom.ModifiedStepper(
+                      //     controlsBuilder: (BuildContext buildContext,
+                      //         stepperCustom.ControlsDetails
+                      //             controlsDetails) {
+                      //       return Row(
+                      //         children: <Widget>[
+                      //           Container(),
+                      //         ],
+                      //       );
+                      //     },
+                      //     steps: [
+                      //       stepperCustom.ModifiedStep(
+                      //           title: TitleStepperCustom(
+                      //             title: 'Download',
+                      //             isDone: downloadDone,
+                      //             isInprogress: downloadInprocess,
+                      //           ),
+                      //           content: ShimmerCustom()),
 
-                                // if (adsInprogress || adsDone)
-                                stepperCustom.ModifiedStep(
-                                  state: adsInprogress
-                                      ? stepperCustom.StepState.editing
-                                      : adsDone
-                                          ? stepperCustom.StepState.complete
-                                          : stepperCustom.StepState.indexed,
-                                  title: Row(
-                                    children: [
-                                      Text(
-                                        'Ads',
-                                        style: textStyleTitle,
-                                      ),
-                                      if (adsDone)
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                      if (adsDone)
-                                        const Icon(
-                                          Icons.check_circle_outline_outlined,
-                                          color: Colors.white,
-                                        ),
-                                      if (adsInprogress)
-                                        const SizedBox(
-                                          width: 100,
-                                        ),
-                                      if (adsInprogress)
-                                        LoadingAnimationWidget.newtonCradle(
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          size: 100,
-                                        ),
-                                    ],
-                                  ),
-                                  content: ContentAds(
-                                    idVin: documentId,
-                                  ),
-                                )
-                              ]),
-                        ),
-                      );
+                      //       /// Enable when backend done
+                      //       if (classificationInprogress ||
+                      //           classificationDone)
+                      //         stepperCustom.ModifiedStep(
+                      //             title: TitleStepperCustom(
+                      //               title: 'Classification',
+                      //               isDone: classificationDone,
+                      //               isInprogress: classificationInprogress,
+                      //             ),
+                      //             content: ContentClassification(
+                      //               idVin: documentId,
+                      //               isDone: classificationDone,
+                      //             isInprogress: classificationInprogress,
+                      //             )),
+
+                      //       if (adsInprogress || adsDone)
+                      //         stepperCustom.ModifiedStep(
+
+                      //           title: TitleStepperCustom(
+                      //             title: 'Ads',
+                      //             isDone: adsDone,
+                      //             isInprogress: adsInprogress,
+                      //           ),
+                      //           content: ContentAds(
+                      //             idVin: documentId,
+                      //             isDone: adsDone,
+                      //             isInprogress: adsInprogress,
+                      //           ),
+                      //         )
+                      //     ]),
                     } catch (e) {
                       Future.delayed(
                           Duration.zero,
@@ -341,19 +262,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-bool getIsActive(int currentIndex, int index) {
-  if (currentIndex <= index) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 Future<bool> submitVin(String vinId) async {
-  String url = 'http://35.226.148.8:5000/dummy/';
-  final response = await http.get(Uri.parse(url + vinId));
+  // String url = 'https://api.imvision-hackathon.tech:5000/dummy/';
+  String url = 'http://34.136.157.18:5000/dummy/';
+
+  final response = await http.post(Uri.parse(url + vinId),
+      headers: {'Access-Control-Allow-Origin': '*'});
 
   if (response.statusCode == 200) {
+    // response.body['message'] :
     print(response);
     return true;
   } else {

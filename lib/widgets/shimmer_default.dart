@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:imvision_studio/widgets/shimmer.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../constants/color_constants.dart';
 
 class ShimmerDefaultCustom extends StatelessWidget {
   const ShimmerDefaultCustom({

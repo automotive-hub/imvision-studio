@@ -1,17 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:imvision_studio/widgets/shimmer.dart';
-import 'package:imvision_studio/widgets/video_player.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:imvision_studio/widgets/shimmer_default.dart';
 
+import '../constants/global_constants.dart';
 import '../models/ads_model.dart';
 import 'container_details_ads.dart';
 
 class ContentAds extends StatefulWidget {
   String idVin;
-  ContentAds({super.key, required this.idVin});
+  bool isDone;
+  bool isInprogress;
+  ContentAds(
+      {super.key,
+      required this.idVin,
+      this.isDone = false,
+      this.isInprogress = false});
 
   @override
   State<ContentAds> createState() => _ContentAdsState();
@@ -33,59 +37,56 @@ class _ContentAdsState extends State<ContentAds> {
           toFirestore: (ads, _) => ads.toJson(),
         )
         .snapshots();
-    return StreamBuilder(
-        stream: documentStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<DocumentSnapshot<Ads>> snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("Loading");
-          }
-          try {
-            final currentData = snapshot.data?.data();
-            if (currentData!.desktopVideoRef.isNotEmpty) {
-              videoDataStringDesktop = currentData.desktopVideoRef;
-            }
-            if (currentData.mobileVideoRef.isNotEmpty) {
-              videoDataStringDesktop = currentData.desktopVideoRef;
-            }
-            if (currentData.gifRef.isNotEmpty) {
-              gifRefString = currentData.gifRef;
-            }
-            if (currentData.bannerRef.isNotEmpty) {
-              bannerRefString = currentData.bannerRef;
-            }
-          } catch (e) {}
-          return SizedBox(
-            height: 100,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                if (videoDataStringDesktop.isNotEmpty)
-                  ContainerDetailsAds(
-                    title: 'Url Video Ads Desktop',
-                    urlRender: videoDataStringDesktop,
-                  ),
-                if (videoDataStringMobile.isNotEmpty)
-                  ContainerDetailsAds(
-                    title: 'Url Video Ads Mobile',
-                    urlRender: videoDataStringMobile,
-                  ),
-                if (videoDataStringMobile.isNotEmpty)
-                  ContainerDetailsAds(
-                    title: 'Gif',
-                    urlRender: videoDataStringMobile,
-                  ),
-                if (videoDataStringMobile.isNotEmpty)
-                  ContainerDetailsAds(
-                    title: 'Banner',
-                    urlRender: videoDataStringMobile,
-                  ),
-              ],
-            ),
-          );
-        });
+    return widget.isDone
+        ? StreamBuilder(
+            stream: documentStream,
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot<Ads>> snapshot) {
+              try {
+                final currentData = snapshot.data?.data();
+                if (currentData!.desktopVideoRef.isNotEmpty) {
+                  videoDataStringDesktop = currentData.desktopVideoRef;
+                }
+                if (currentData.mobileVideoRef.isNotEmpty) {
+                  videoDataStringDesktop = currentData.desktopVideoRef;
+                }
+                if (currentData.gifRef.isNotEmpty) {
+                  gifRefString = currentData.gifRef;
+                }
+                if (currentData.bannerRef.isNotEmpty) {
+                  bannerRefString = currentData.bannerRef;
+                }
+              } catch (e) {}
+              return SizedBox(
+                height: 250,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    // if (videoDataStringDesktop.isNotEmpty)
+                    ContainerDetailsAds(
+                      title: GlobalText.titleUrlVideoDesktop,
+                      urlRender: videoDataStringDesktop,
+                    ),
+                    // if (videoDataStringMobile.isNotEmpty)
+                    ContainerDetailsAds(
+                      title: GlobalText.titleUrlVideoMobile,
+                      urlRender: videoDataStringMobile,
+                    ),
+                    // if (videoDataStringMobile.isNotEmpty)
+                    ContainerDetailsAds(
+                      title: GlobalText.titleUrlGif,
+                      urlRender: gifRefString,
+                    ),
+                    // if (videoDataStringMobile.isNotEmpty
+
+                    ContainerDetailsAds(
+                      title: GlobalText.titleUrlBanner,
+                      urlRender: bannerRefString,
+                    ),
+                  ],
+                ),
+              );
+            })
+        : ShimmerCustom();
   }
 }

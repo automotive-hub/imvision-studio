@@ -9,7 +9,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Innovation Q1 - 2023',
       theme: ThemeData.light(useMaterial3: true,),
       home: const DashboardScreen(),
     );
