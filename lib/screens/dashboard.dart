@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../models/status_model.dart';
+import '../services/submit_vin.dart';
 import '../widgets/content_ads.dart';
-import '../widgets/divider.dart';
+import '../widgets/content_classification.dart';
 import '../widgets/shimmer.dart';
-import '../widgets/stepper_ads.dart';
-import '../widgets/stepper_ads.dart';
 import '../widgets/stepper_custom.dart' as stepperCustom;
 
 class DashboardScreen extends StatefulWidget {
@@ -20,7 +19,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  String documentId = 'JA4AZ3A30LZ038326_1676364152141';
+  String documentId = '';
   final textControllerVin = TextEditingController();
   bool isSubmitVinSuccess = false;
   late Stream<DocumentSnapshot<Status>> documentStream;
@@ -61,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   //         image: AssetImage('assets/images/bg_vin.png'))),
                   child: TextField(
                     controller: textControllerVin,
-                    inputFormatters: [LengthLimitingTextInputFormatter(17)],
+                    // inputFormatters: [LengthLimitingTextInputFormatter(17)],
                     decoration: const InputDecoration(
                       // enabledBorder: OutlineInputBorder(
                       //   borderSide:
@@ -70,22 +69,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       border: OutlineInputBorder(),
                       labelText: 'Enter your VIN',
                     ),
-                    onSubmitted: (value) {
-                      // documentId =
-                      //     textControllerVin.text + DateTime.now().millisecondsSinceEpoch.toString();
+                    onSubmitted: (value) async {
+                      documentId = textControllerVin.text +
+                          '_' +
+                          DateTime.now().millisecondsSinceEpoch.toString();
 
-                      setState(() {
-                        isSubmitVinSuccess = true;
-                        documentStream = FirebaseFirestore.instance
-                            .collection('status')
-                            .doc(documentId.toLowerCase())
-                            .withConverter<Status>(
-                              fromFirestore: (snapshot, _) =>
-                                  Status.fromJson(snapshot.data()!),
-                              toFirestore: (status, _) => status.toJson(),
-                            )
-                            .snapshots();
-                      });
+                      try {
+                        final responseData = submitVin(documentId);
+                        // if (responseData) {
+                        setState(() {
+                          isSubmitVinSuccess = true;
+                          documentStream = FirebaseFirestore.instance
+                              .collection('status')
+                              .doc(documentId)
+                              .withConverter<Status>(
+                                fromFirestore: (snapshot, _) =>
+                                    Status.fromJson(snapshot.data()!),
+                                toFirestore: (status, _) => status.toJson(),
+                              )
+                              .snapshots();
+                        });
+                        // } else {}
+                      } catch (e) {
+                        /// Error service
+                      }
                     },
                   ),
                 ),
@@ -205,163 +212,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         )
                                       ],
                                     )),
-                                if (currentStatus.classification == 'idle')
-                                  stepperCustom.ModifiedStep(
-                                      state: classificationInprocess
-                                          ? stepperCustom.StepState.editing
-                                          : stepperCustom.StepState.complete,
-                                      title: Row(
-                                        mainAxisAlignment: classificationDone
-                                            ? MainAxisAlignment.start
-                                            : MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Classification',
-                                            style: textStyleTitle,
-                                          ),
-                                          if (classificationDone)
-                                            const SizedBox(
-                                              width: 20,
-                                            ),
-                                          if (classificationDone)
-                                            const Icon(
-                                              Icons
-                                                  .check_circle_outline_outlined,
-                                              color: Colors.white,
-                                            ),
-                                          if (classificationInprocess)
-                                            const SizedBox(
-                                              width: 100,
-                                            ),
-                                          if (classificationInprocess)
-                                            LoadingAnimationWidget.newtonCradle(
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              size: 100,
-                                            ),
-                                        ],
-                                      ),
-                                      content: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'EXTERIOR',
-                                            style: textStyleTitle,
-                                          ),
+                                // if (currentStatus.classification == 'idle')
+                                stepperCustom.ModifiedStep(
+                                    state: classificationInprocess
+                                        ? stepperCustom.StepState.editing
+                                        : stepperCustom.StepState.complete,
+                                    title: Row(
+                                      mainAxisAlignment: classificationDone
+                                          ? MainAxisAlignment.start
+                                          : MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Classification',
+                                          style: textStyleTitle,
+                                        ),
+                                        if (classificationDone)
                                           const SizedBox(
-                                            height: 10,
+                                            width: 20,
                                           ),
-                                          // if (currentStatus.classification ==
-                                          //     'in-process')
-                                          ShimmerCustom(),
-                                          // if(currentStatus.classification ==
-                                          //     'done')
-                                          // Row(
-                                          //   children: [
-                                          //     ListView(
-                                          //       children: [],
-                                          //     )
-                                          //   ],
-                                          // ),
-                                          DividerCustom(),
-                                          SizedBox(
-                                            height: 10,
+                                        if (classificationDone)
+                                          const Icon(
+                                            Icons.check_circle_outline_outlined,
+                                            color: Colors.white,
                                           ),
-                                          Text(
-                                            'RIGHT_PANEL',
-                                            style: textStyleTitle,
+                                        if (classificationInprocess)
+                                          const SizedBox(
+                                            width: 100,
                                           ),
-                                          SizedBox(
-                                            height: 10,
+                                        if (classificationInprocess)
+                                          LoadingAnimationWidget.newtonCradle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            size: 100,
                                           ),
-                                          ShimmerCustom(),
-                                          DividerCustom(),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'BOTTOM_RIGHT_PANEL',
-                                            style: textStyleTitle,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          ShimmerCustom(),
-                                          DividerCustom(),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'BOTTOM_BACK',
-                                            style: textStyleTitle,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          ShimmerCustom(),
-                                          DividerCustom(),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'BOTTOM_LEFT_PANEL',
-                                            style: textStyleTitle,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          ShimmerCustom(),
-                                          DividerCustom(),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'BOTTOM_LEFT',
-                                            style: textStyleTitle,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          ShimmerCustom(),
-                                          DividerCustom(),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'DASH_PANEL',
-                                            style: textStyleTitle,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          ShimmerCustom(),
-                                          DividerCustom(),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'MID_CENTER_POINT',
-                                            style: textStyleTitle,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          ShimmerCustom(),
-                                          DividerCustom(),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'IMAGE_WITH_ADVERTISEMENT',
-                                            style: textStyleTitle,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          ShimmerCustom(),
-                                        ],
-                                      )),
+                                      ],
+                                    ),
+                                    content: ContentClassification(
+                                      idVin: documentId,
+                                    )),
                                 // if (currentStatus.video == 'idle')
                                 stepperCustom.ModifiedStep(
                                   state: adsInprocess
@@ -394,7 +282,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         ),
                                     ],
                                   ),
-                                  content: ContentAds(),
+                                  content: ContentAds(
+                                    idVin: documentId,
+                                  ),
 
                                   // widgetStepperAds(
                                   //     adsInprocess, adsDone, context, documentId)
@@ -421,5 +311,17 @@ bool getIsActive(int currentIndex, int index) {
     return true;
   } else {
     return false;
+  }
+}
+
+Future<bool> submitVin(String vinId) async {
+  String url = 'http://35.226.148.8:5000/dummy/';
+  final response = await http.get(Uri.parse(url + vinId));
+
+  if (response.statusCode == 200) {
+    print(response);
+    return true;
+  } else {
+    throw Exception('Failed to load album');
   }
 }
