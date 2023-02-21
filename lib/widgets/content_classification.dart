@@ -10,7 +10,9 @@ import 'divider.dart';
 class ContentClassification extends StatefulWidget {
   String idVin;
 
-  ContentClassification({super.key, required this.idVin});
+  ContentClassification(
+      {super.key,
+      required this.idVin,});
 
   @override
   State<ContentClassification> createState() => _ContentClassificationState();

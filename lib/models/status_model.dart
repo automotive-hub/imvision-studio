@@ -8,15 +8,15 @@ class Status {
       required this.predictionTotal,
       required this.video});
 
-  Status.fromJson(Map<String, Object?> json)
+  Status.fromJson(Map<String, dynamic> json)
       : this(
-          classification: json['classification']! as String,
-          download: json['download']! as String,
-          imageTotal: json['image_total']! as int,
-          imageCounter: json['image_counter']! as int,
-          predictionCounter: json['prediction_counter']! as int,
-          predictionTotal: json['prediction_total']! as int,
-          video: json['video']! as String,
+          classification: json['classification'] ?? '',
+          download: json['download'] ?? '',
+          imageTotal: json['image_total'] ?? 0,
+          imageCounter: json['image_counter'] ?? 0,
+          predictionCounter: json['prediction_counter'] ?? 0,
+          predictionTotal: json['prediction_total'] ?? 0,
+          video: json['video'] ?? '',
         );
 
   final String classification;

@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../models/status_model.dart';
-import '../services/submit_vin.dart';
 import '../widgets/content_ads.dart';
 import '../widgets/content_classification.dart';
 import '../widgets/shimmer.dart';
+// ignore: library_prefixes
 import '../widgets/stepper_custom.dart' as stepperCustom;
 
 class DashboardScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  String documentId = '';
+  String documentId = '1FT6W1EV5PWG07389_C99';
   final textControllerVin = TextEditingController();
   bool isSubmitVinSuccess = false;
   late Stream<DocumentSnapshot<Status>> documentStream;
@@ -27,16 +28,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String classification = '';
   String video = '';
   String image = '';
-  bool hide = false;
+  bool errorService = false;
 
   final textStyleTitle =
       const TextStyle(color: Colors.black, fontWeight: FontWeight.bold);
   @override
   Widget build(BuildContext context) {
     bool classificationDone = false;
-    bool classificationInprocess = false;
+    bool classificationInprogress = false;
     bool adsDone = false;
-    bool adsInprocess = false;
+    bool adsInprogress = false;
     bool downloadDone = false;
     bool downloadInprocess = false;
     return Scaffold(
@@ -70,12 +71,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       labelText: 'Enter your VIN',
                     ),
                     onSubmitted: (value) async {
-                      documentId = textControllerVin.text +
-                          '_' +
-                          DateTime.now().millisecondsSinceEpoch.toString();
+                      // documentId =
+                      //     '${textControllerVin.text}_${DateTime.now().millisecondsSinceEpoch}';
 
                       try {
-                        final responseData = submitVin(documentId);
+                        // final responseData = submitVin(documentId);
                         // if (responseData) {
                         setState(() {
                           isSubmitVinSuccess = true;
@@ -116,26 +116,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     try {
                       final currentStatus = snapshot.data?.data();
                       classificationDone = false;
-                      classificationInprocess = false;
+                      classificationInprogress = false;
                       adsDone = false;
-                      adsInprocess = false;
+                      adsInprogress = false;
                       downloadDone = false;
                       downloadInprocess = false;
                       if (currentStatus!.classification == 'done') {
                         classificationDone = true;
-                        classificationInprocess = false;
+                        classificationInprogress = false;
                       }
                       if (currentStatus.classification == 'in-process') {
                         classificationDone = false;
-                        classificationInprocess = true;
+                        classificationInprogress = true;
                       }
                       if (currentStatus.video == 'done') {
                         adsDone = true;
-                        adsInprocess = false;
+                        adsInprogress = false;
                       }
                       if (currentStatus.video == 'in-process') {
                         adsDone = false;
-                        adsInprocess = true;
+                        adsInprogress = true;
                       }
                       if (currentStatus.download == 'done') {
                         downloadDone = true;
@@ -169,7 +169,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 stepperCustom.ModifiedStep(
                                     state: downloadInprocess
                                         ? stepperCustom.StepState.editing
-                                        : stepperCustom.StepState.complete,
+                                        : downloadDone
+                                            ? stepperCustom.StepState.complete
+                                            : stepperCustom.StepState.indexed,
                                     title: Row(
                                       children: [
                                         Text(
@@ -200,23 +202,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     content: Column(
                                       children: [
                                         Shimmer.fromColors(
-                                          child: Container(
-                                            color: Colors.black12,
-                                            child: Text('Hello'),
-                                          ),
                                           baseColor:
                                               ColorsCustom.primary.shade50,
                                           highlightColor: ColorsCustom
                                               .primary.shade100
                                               .withOpacity(0.3),
+                                          child: Container(
+                                            color: Colors.black12,
+                                            child: const Text('Hello'),
+                                          ),
                                         )
                                       ],
                                     )),
-                                // if (currentStatus.classification == 'idle')
+
+                                /// Enable when backend done
+                                // if (classificationInprogress ||
+                                //     classificationDone)
                                 stepperCustom.ModifiedStep(
-                                    state: classificationInprocess
+                                    state: classificationInprogress
                                         ? stepperCustom.StepState.editing
-                                        : stepperCustom.StepState.complete,
+                                        : classificationDone
+                                            ? stepperCustom.StepState.complete
+                                            : stepperCustom.StepState.indexed,
                                     title: Row(
                                       mainAxisAlignment: classificationDone
                                           ? MainAxisAlignment.start
@@ -235,11 +242,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             Icons.check_circle_outline_outlined,
                                             color: Colors.white,
                                           ),
-                                        if (classificationInprocess)
+                                        if (classificationInprogress)
                                           const SizedBox(
                                             width: 100,
                                           ),
-                                        if (classificationInprocess)
+                                        if (classificationInprogress)
                                           LoadingAnimationWidget.newtonCradle(
                                             color: const Color.fromARGB(
                                                 255, 255, 255, 255),
@@ -250,11 +257,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     content: ContentClassification(
                                       idVin: documentId,
                                     )),
-                                // if (currentStatus.video == 'idle')
+
+                                // if (adsInprogress || adsDone)
                                 stepperCustom.ModifiedStep(
-                                  state: adsInprocess
+                                  state: adsInprogress
                                       ? stepperCustom.StepState.editing
-                                      : stepperCustom.StepState.complete,
+                                      : adsDone
+                                          ? stepperCustom.StepState.complete
+                                          : stepperCustom.StepState.indexed,
                                   title: Row(
                                     children: [
                                       Text(
@@ -270,11 +280,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           Icons.check_circle_outline_outlined,
                                           color: Colors.white,
                                         ),
-                                      if (adsInprocess)
+                                      if (adsInprogress)
                                         const SizedBox(
                                           width: 100,
                                         ),
-                                      if (adsInprocess)
+                                      if (adsInprogress)
                                         LoadingAnimationWidget.newtonCradle(
                                           color: const Color.fromARGB(
                                               255, 255, 255, 255),
@@ -285,15 +295,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   content: ContentAds(
                                     idVin: documentId,
                                   ),
-
-                                  // widgetStepperAds(
-                                  //     adsInprocess, adsDone, context, documentId)
                                 )
                               ]),
                         ),
                       );
                     } catch (e) {
-                      print(e);
+                      Future.delayed(
+                          Duration.zero,
+                          () => showBottomSheet(
+                              backgroundColor: Colors.grey.shade50,
+                              constraints: const BoxConstraints(maxHeight: 500),
+                              context: context,
+                              builder: (BuildContext contextDiaglog) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Center(
+                                    child: SizedBox(
+                                      height: 500,
+                                      width: 500,
+                                      child: Column(
+                                        children: [
+                                          const Text(
+                                              'Something wrong with service. Please try again!'),
+                                          const SizedBox(
+                                            height: 50,
+                                          ),
+                                          Text(e.toString()),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }));
                     }
                     return Container();
                   },
