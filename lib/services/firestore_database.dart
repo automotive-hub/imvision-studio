@@ -41,7 +41,7 @@ class FireStoreDatabase {
   Stream<Ads> get generationAdsStream => generationAds.asBroadcastStream();
   // -- -- --
   //
-  final List<StreamSubscription> _streamListener = [];
+  List<StreamSubscription> _streamListener = [];
 //
   Future<void> init({required String vin}) async {
     await dispose();
@@ -74,5 +74,6 @@ class FireStoreDatabase {
     for (var element in _streamListener) {
       await element.cancel();
     }
+    _streamListener = [];
   }
 }

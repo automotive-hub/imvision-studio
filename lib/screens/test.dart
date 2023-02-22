@@ -38,7 +38,7 @@ class _DashBoardTestState extends State<DashBoardTest> {
           color: Colors.grey[200],
           iconSize: 55,
           onPressed: () {},
-          icon: Icon(Icons.info)),
+          icon: const Icon(Icons.info)),
       body: SafeArea(
           child: Row(
         children: [
@@ -73,7 +73,17 @@ class _DashBoardTestState extends State<DashBoardTest> {
                     const SizedBox(
                       height: marginContainerDetails,
                     ),
-                    DebugVIN(styleTitle: styleTitle),
+                    DebugVIN(
+                      styleTitle: styleTitle,
+                      vin: '2G61N5S36J9156077_C99001',
+                    ),
+                    const SizedBox(
+                      height: marginContainerDetails,
+                    ),
+                    DebugVIN(
+                      styleTitle: styleTitle,
+                      vin: '3FA6P0G76JR114164_1677045877334',
+                    ),
                   ]),
             ),
           ),
@@ -112,9 +122,11 @@ class _DashBoardTestState extends State<DashBoardTest> {
 }
 
 class DebugVIN extends StatelessWidget {
+  final String vin;
   const DebugVIN({
     Key? key,
     required this.styleTitle,
+    required this.vin,
   }) : super(key: key);
 
   final TextStyle styleTitle;
@@ -123,22 +135,24 @@ class DebugVIN extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white30,
-      child: TextButton(
-          onPressed: () async {
-            var vin = '2G61N5S36J9156077_C99001';
-            // await submitVin(vin);
-            context.read<FireStoreDatabase>().init(vin: vin);
-            context
-                .read<FireStoreDatabase>()
-                .generationStatusStream
-                .listen((event) {
-              print(event.toJson());
-            });
-          },
-          child: Text(
-            "DEBUG VIN : 2G61N5S36J9156077_C99001",
-            style: styleTitle.copyWith(color: Colors.grey),
-          )),
+      child: Column(
+        children: [
+          TextButton(
+              onPressed: () async {
+                await context.read<FireStoreDatabase>().init(vin: this.vin);
+                context
+                    .read<FireStoreDatabase>()
+                    .generationStatusStream
+                    .listen((event) {
+                  print(event.toJson());
+                });
+              },
+              child: Text(
+                "DEBUG VIN : " + vin,
+                style: styleTitle.copyWith(color: Colors.grey),
+              )),
+        ],
+      ),
     );
   }
 }
