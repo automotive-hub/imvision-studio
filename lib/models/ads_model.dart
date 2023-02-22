@@ -6,12 +6,12 @@ class Ads {
     required this.bannerRef,
   });
 
-  Ads.fromJson(Map<String, Object?> json)
+  Ads.fromJson(Map<String, dynamic> json)
       : this(
-          desktopVideoRef: json['desktop_video_ref']! as String,
-          mobileVideoRef: json['mobile_video_ref']! as String,
-          gifRef: json['gif_ref']! as String,
-          bannerRef: json['banner_ref']! as String,
+          desktopVideoRef: json['desktop_video_ref'] ?? '',
+          mobileVideoRef: json['mobile_video_ref'] ?? '',
+          gifRef: json['gif_ref'] ?? '',
+          bannerRef: json['banner_ref'] ?? '',
         );
 
   final String desktopVideoRef;

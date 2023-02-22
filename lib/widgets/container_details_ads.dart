@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:imvision_studio/widgets/video_player.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'dart:html' as html;
 
 class ContainerDetailsAds extends StatelessWidget {
   String title;
@@ -14,6 +15,8 @@ class ContainerDetailsAds extends StatelessWidget {
     return InkWell(
       onTap: () async {
         if (await canLaunchUrlString(urlRender)) {
+          // html.window.open('https://stackoverflow.com/questions/ask', 'new tab');
+
           await launchUrlString(urlRender);
         }
       },

@@ -44,6 +44,7 @@ dependencies:
   url_launcher: ^6.1.9
   cached_network_image: ^3.2.3
   firebase_storage: ^11.0.13
+  percent_indicator: ^4.2.2
 
 dev_dependencies:
   flutter_test:

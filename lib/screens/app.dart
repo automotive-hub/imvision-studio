@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imvision_studio/screens/test.dart';
 
 import 'dashboard.dart';
 
@@ -10,8 +11,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Innovation Q1 - 2023',
-      theme: ThemeData.light(useMaterial3: true,),
-      home: const DashboardScreen(),
+      theme: ThemeData.dark(
+        useMaterial3: true,
+      ),
+      home: const DashBoardTest(),
     );
   }
 }

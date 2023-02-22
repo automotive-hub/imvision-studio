@@ -6,6 +6,7 @@ import 'package:imvision_studio/widgets/title_stepper.dart';
 
 import 'content_ads.dart';
 import 'content_classification.dart';
+import 'content_download.dart';
 
 class StepperCustom extends StatelessWidget {
   bool isDone;
@@ -41,7 +42,7 @@ class StepperCustom extends StatelessWidget {
         isInprogress: isInprocess,
       );
     } else if (isDownloadWidget && isDone) {
-      widgetBuilderContent = SizedBox();
+      widgetBuilderContent = ContentDownloadWidget();
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

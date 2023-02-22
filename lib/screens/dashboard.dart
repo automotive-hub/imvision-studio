@@ -67,12 +67,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       labelText: 'Enter your VIN',
                     ),
                     onSubmitted: (value) async {
-                      // documentId =
-                      //     '${textControllerVin.text}_${DateTime.now().millisecondsSinceEpoch}';
+                      documentId =
+                          '${textControllerVin.text}_${DateTime.now().millisecondsSinceEpoch}';
 
                       try {
-                        // final responseData = await submitVin(documentId);
-                        // if (responseData) {
+                        final responseData = await submitVin(documentId);
+                        if (responseData) {
                         setState(() {
                           isSubmitVinSuccess = true;
                           documentStream = FirebaseFirestore.instance
@@ -85,7 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               )
                               .snapshots();
                         });
-                        // } else {}
+                        } else {}
                       } catch (e) {
                         /// Error service
                       }
@@ -263,8 +263,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 Future<bool> submitVin(String vinId) async {
-  // String url = 'https://api.imvision-hackathon.tech:5000/dummy/';
-  String url = 'http://34.136.157.18:5000/dummy/';
+  String url = 'https://api.imvision-hackathon.tech:5000/dummy/';
+  // String url = 'http://34.136.157.18:5000/dummy/';
 
   final response = await http.post(Uri.parse(url + vinId),
       headers: {'Access-Control-Allow-Origin': '*'});

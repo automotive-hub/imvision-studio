@@ -42,6 +42,12 @@ class _ContentAdsState extends State<ContentAds> {
             stream: documentStream,
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot<Ads>> snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Something went wrong');
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text("Loading");
+              }
               try {
                 final currentData = snapshot.data?.data();
                 if (currentData!.desktopVideoRef.isNotEmpty) {
