@@ -1,6 +1,6 @@
 enum AppStatus { processing, idle, done }
 
-enum AppMenu { classification, download, ads }
+enum AppMenu { classification, download, ads, video }
 
 class Status {
   Status(

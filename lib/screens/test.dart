@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:imvision_studio/models/status_model.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/global_constants.dart';
 import '../services/firestore_database.dart';
 import '../widgets/dashboard/info_corner.dart';
 import 'package:http/http.dart' as http;
+
+import '../widgets/dashboard/menu_button.dart';
 
 class DashBoardTest extends StatefulWidget {
   const DashBoardTest({super.key});
@@ -31,8 +34,11 @@ class _DashBoardTestState extends State<DashBoardTest> {
         TextStyle(color: Colors.grey, fontSize: 12);
     return Scaffold(
       backgroundColor: Colors.black,
-      floatingActionButton:
-          IconButton(onPressed: () {}, icon: Icon(Icons.insights)),
+      floatingActionButton: IconButton(
+          color: Colors.grey[200],
+          iconSize: 55,
+          onPressed: () {},
+          icon: Icon(Icons.info)),
       body: SafeArea(
           child: Row(
         children: [
@@ -46,56 +52,28 @@ class _DashBoardTestState extends State<DashBoardTest> {
                   children: [
                     InfoCorner(),
                     const SizedBox(height: paddingWithTitle),
-                    TextButton(
-                        onPressed: () async {
-                          var vin =
-                              '3FA6P0G76JR114164_${DateTime.now().millisecondsSinceEpoch}';
-                          await submitVin(vin);
-                          context.read<FireStoreDatabase>().init(vin: vin);
-                          context
-                              .read<FireStoreDatabase>()
-                              .generationStatusStream
-                              .listen((event) {
-                            print(event.toJson());
-                          });
-                        },
-                        child: Text(
-                          GlobalText.titleDashboard,
-                          style: styleTitle.copyWith(color: Colors.grey),
-                        )),
+                    const MenuButton(
+                      menuType: AppMenu.download,
+                      title: GlobalText.titleDownload,
+                    ),
                     const SizedBox(
                       height: marginContainerDetails,
                     ),
-                    TextButton(
-                        onPressed: () {
-                          print('Download');
-                        },
-                        child: const Text(
-                          GlobalText.titleDownload,
-                          style: styleTitle,
-                        )),
+                    const MenuButton(
+                      menuType: AppMenu.classification,
+                      title: GlobalText.titleClassification,
+                    ),
                     const SizedBox(
                       height: marginContainerDetails,
                     ),
-                    TextButton(
-                        onPressed: () {
-                          print('Classification');
-                        },
-                        child: const Text(
-                          GlobalText.titleClassification,
-                          style: styleTitle,
-                        )),
+                    const MenuButton(
+                      menuType: AppMenu.video,
+                      title: GlobalText.titleAds,
+                    ),
                     const SizedBox(
                       height: marginContainerDetails,
                     ),
-                    TextButton(
-                        onPressed: () {
-                          print('Ads');
-                        },
-                        child: const Text(
-                          GlobalText.titleAds,
-                          style: styleTitle,
-                        ))
+                    DebugVIN(styleTitle: styleTitle),
                   ]),
             ),
           ),
@@ -130,5 +108,37 @@ class _DashBoardTestState extends State<DashBoardTest> {
     } else {
       throw Exception('Failed to load album');
     }
+  }
+}
+
+class DebugVIN extends StatelessWidget {
+  const DebugVIN({
+    Key? key,
+    required this.styleTitle,
+  }) : super(key: key);
+
+  final TextStyle styleTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white30,
+      child: TextButton(
+          onPressed: () async {
+            var vin = '2G61N5S36J9156077_C99001';
+            // await submitVin(vin);
+            context.read<FireStoreDatabase>().init(vin: vin);
+            context
+                .read<FireStoreDatabase>()
+                .generationStatusStream
+                .listen((event) {
+              print(event.toJson());
+            });
+          },
+          child: Text(
+            "DEBUG VIN : 2G61N5S36J9156077_C99001",
+            style: styleTitle.copyWith(color: Colors.grey),
+          )),
+    );
   }
 }
