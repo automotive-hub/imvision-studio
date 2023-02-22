@@ -9,8 +9,19 @@ class GlobalText {
   static const String titleUrlBanner = "Banner";
 }
 
-class TitleUSer{
-  static const String userName = "Cox trả lương";
-  static const String email = "EmailDuyBeo@gmail.com";
+class ContactInformation {
+  static const pointOfContact = "+849.....8509";
+  static const productName = "Imvision-hackathon";
 
+  static const organizationHub = "github.com/automotive-hub";
+  static List<String> teamsEmail = [
+    "truonghoangduy.dev@gmail.com",
+    "dangcao3659@gmail.com",
+    "bao.tdk2369@gmail.com"
+  ];
+}
+
+class TitleUSer {
+  static const String userName = "Imvision-hackathon";
+  static const String email = "github.com/automotive-hub";
 }
