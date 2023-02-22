@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:imvision_studio/models/status_model.dart';
+import 'package:imvision_studio/widgets/content_download.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/global_constants.dart';
 import '../services/firestore_database.dart';
+import '../widgets/content_classification.dart';
 import '../widgets/dashboard/info_corner.dart';
 import 'package:http/http.dart' as http;
 
 import '../widgets/dashboard/menu_button.dart';
+import '../widgets/shimmer_default.dart';
 
 class DashBoardTest extends StatefulWidget {
   const DashBoardTest({super.key});
@@ -19,19 +22,23 @@ class DashBoardTest extends StatefulWidget {
 }
 
 class _DashBoardTestState extends State<DashBoardTest> {
+  Widget switchWidget = ShimmerDefaultCustom();
+
   @override
   Widget build(BuildContext context) {
+    String vin = '';
     const double paddingWithTitle = 100;
     final double getSizeScreen = MediaQuery.of(context).size.width;
     final double sizeContainerButllet = getSizeScreen / 6;
     final double sizeContainerDetails =
         getSizeScreen - sizeContainerButllet - 120;
     const double marginContainerDetails = 20;
-
     const TextStyle styleTitle = TextStyle(
         fontWeight: FontWeight.bold, color: Colors.white, fontSize: 17);
     const TextStyle styleEmailUser =
         TextStyle(color: Colors.grey, fontSize: 12);
+    bool isClassificationDone = false;
+    bool isClassificationInprocess = false;
     return Scaffold(
       backgroundColor: Colors.black,
       floatingActionButton: IconButton(
@@ -77,6 +84,55 @@ class _DashBoardTestState extends State<DashBoardTest> {
                       styleTitle: styleTitle,
                       vin: '2G61N5S36J9156077_C99001',
                     ),
+                    TextButton(
+                        onPressed: () async {
+                          vin = '3FA6P0G76JR114164_1677045877334';
+                          // '3FA6P0G76JR114164_${DateTime.now().millisecondsSinceEpoch}';
+                          await submitVin(vin);
+                          context.read<FireStoreDatabase>().init(vin: vin);
+                          context
+                              .read<FireStoreDatabase>()
+                              .generationStatusStream
+                              .listen((event) {
+                            print(event.toJson());
+                            isClassificationDone =
+                                event.classification == 'done';
+                            setState(() {});
+                          });
+                        },
+                        child: Text(
+                          GlobalText.titleDashboard,
+                          style: styleTitle.copyWith(color: Colors.grey),
+                        )),
+                    const SizedBox(
+                      height: marginContainerDetails,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            switchWidget = ContentDownloadWidget();
+                          });
+                        },
+                        child: const Text(
+                          GlobalText.titleDownload,
+                          style: styleTitle,
+                        )),
+                    const SizedBox(
+                      height: marginContainerDetails,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          switchWidget = ContentClassification(
+                            isDone: true,
+                            isInprogress: isClassificationInprocess,
+                            vinId: vin,
+                          );
+                          setState(() {});
+                        },
+                        child: const Text(
+                          GlobalText.titleClassification,
+                          style: styleTitle,
+                        )),
                     const SizedBox(
                       height: marginContainerDetails,
                     ),
@@ -97,7 +153,7 @@ class _DashBoardTestState extends State<DashBoardTest> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text('asdas'),
+            child: switchWidget,
           )
         ],
       )),
@@ -105,19 +161,19 @@ class _DashBoardTestState extends State<DashBoardTest> {
   }
 
   Future<bool> submitVin(String vinId) async {
-    String url = 'https://staging.imvision-hackathon.tech/dummy/';
-    // String url = 'http://34.136.157.18:5000/dummy/';
+    // String url = 'https://staging.imvision-hackathon.tech/dummy/';
+    // // String url = 'http://34.136.157.18:5000/dummy/';
 
-    final response = await http.post(Uri.parse(url + vinId),
-        headers: {'Access-Control-Allow-Origin': '*'});
+    // final response = await http.post(Uri.parse(url + vinId),
+    //     headers: {'Access-Control-Allow-Origin': '*'});
 
-    if (response.statusCode == 200) {
-      // response.body['message'] :
-      print(response);
-      return true;
-    } else {
-      throw Exception('Failed to load album');
-    }
+    // if (response.statusCode == 200) {
+    // response.body['message'] :
+    // print(response);
+    return true;
+    // } else {
+    //   throw Exception('Failed to load album');
+    // }
   }
 }
 

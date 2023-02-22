@@ -7,6 +7,7 @@ class GlobalText {
   static const String titleUrlVideoMobile = "Url Video Ads Mobile";
   static const String titleUrlGif = "Gif";
   static const String titleUrlBanner = "Banner";
+  static const String vinId = "VIN: #";
 }
 
 class ContactInformation {
@@ -24,4 +25,16 @@ class ContactInformation {
 class TitleUSer {
   static const String userName = "Imvision-hackathon";
   static const String email = "github.com/automotive-hub";
+}
+
+class ClassificationtText {
+  static const bottomBack = "BOTTOM_BACK";
+  static const bottomLeftPanel = "BOTTOM_LEFT_PANEL";
+  static const bottomRightPanel = "BOTTOM_RIGHT_PANEL";
+  static const dashPanel = "DASH_PANEL";
+  static const exterior = "EXTERIOR";
+  static const imageWithAdvertisement = "IMAGE_WITH_ADVERTISEMENT";
+  static const leftPanel = "LEFT_PANEL";
+  static const rightPanel = "RIGHT_PANEL";
+  static const midCenterPoint = "MID_CENTER_POINT";
 }

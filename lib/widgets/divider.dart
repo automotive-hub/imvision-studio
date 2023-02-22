@@ -10,7 +10,7 @@ class DividerCustom extends StatelessWidget {
       child: Divider(
         thickness: 2,
         height: 10,
-        color: Colors.black87,
+        color: Colors.deepPurpleAccent,
       ),
     );
   }
