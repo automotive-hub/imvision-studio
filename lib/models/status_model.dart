@@ -1,3 +1,7 @@
+enum AppStatus { processing, idle, done }
+
+enum AppMenu { classification, download, ads }
+
 class Status {
   Status(
       {required this.classification,
