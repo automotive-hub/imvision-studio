@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:imvision_studio/screens/test.dart';
 
 import 'dashboard.dart';
@@ -13,7 +14,7 @@ class App extends StatelessWidget {
       title: 'Innovation Q1 - 2023',
       theme: ThemeData.dark(
         useMaterial3: true,
-      ),
+      ).copyWith(textTheme: GoogleFonts.montserratTextTheme()),
       home: const DashBoardTest(),
     );
   }
