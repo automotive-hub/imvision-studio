@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/global_constants.dart';
+import '../services/firestore_database.dart';
+import '../widgets/dashboard/info_corner.dart';
+import 'package:http/http.dart' as http;
 
 class DashBoardTest extends StatefulWidget {
   const DashBoardTest({super.key});
@@ -20,14 +24,15 @@ class _DashBoardTestState extends State<DashBoardTest> {
     final double sizeContainerDetails =
         getSizeScreen - sizeContainerButllet - 120;
     const double marginContainerDetails = 20;
-    const TextStyle styleNameUser = TextStyle(
-        fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20);
+
     const TextStyle styleTitle = TextStyle(
         fontWeight: FontWeight.bold, color: Colors.white, fontSize: 17);
     const TextStyle styleEmailUser =
         TextStyle(color: Colors.grey, fontSize: 12);
     return Scaffold(
       backgroundColor: Colors.black,
+      floatingActionButton:
+          IconButton(onPressed: () {}, icon: Icon(Icons.insights)),
       body: SafeArea(
           child: Row(
         children: [
@@ -39,29 +44,20 @@ class _DashBoardTestState extends State<DashBoardTest> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset('assets/images/avatar.jpeg')),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      TitleUSer.userName,
-                      style: styleNameUser,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                    const Text(
-                      TitleUSer.email,
-                      style: styleEmailUser,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    InfoCorner(),
                     const SizedBox(height: paddingWithTitle),
                     TextButton(
-                        onPressed: () {
-                          print('Dash board');
+                        onPressed: () async {
+                          var vin =
+                              '3FA6P0G76JR114164_${DateTime.now().millisecondsSinceEpoch}';
+                          await submitVin(vin);
+                          context.read<FireStoreDatabase>().init(vin: vin);
+                          context
+                              .read<FireStoreDatabase>()
+                              .generationStatusStream
+                              .listen((event) {
+                            print(event.toJson());
+                          });
                         },
                         child: Text(
                           GlobalText.titleDashboard,
@@ -118,5 +114,21 @@ class _DashBoardTestState extends State<DashBoardTest> {
         ],
       )),
     );
+  }
+
+  Future<bool> submitVin(String vinId) async {
+    String url = 'https://staging.imvision-hackathon.tech/dummy/';
+    // String url = 'http://34.136.157.18:5000/dummy/';
+
+    final response = await http.post(Uri.parse(url + vinId),
+        headers: {'Access-Control-Allow-Origin': '*'});
+
+    if (response.statusCode == 200) {
+      // response.body['message'] :
+      print(response);
+      return true;
+    } else {
+      throw Exception('Failed to load album');
+    }
   }
 }
