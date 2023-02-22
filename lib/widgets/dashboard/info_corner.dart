@@ -16,12 +16,26 @@ class InfoCorner extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 50,
-          width: 50,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset('assets/images/avatar.jpeg')),
+        Row(
+          children: [
+            SizedBox(
+              height: 50,
+              width: 50,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset('assets/images/avatar.jpeg')),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            SizedBox(
+              height: 50,
+              width: 50,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset('assets/images/creeper.png')),
+            ),
+          ],
         ),
         const SizedBox(height: 10),
         Container(
