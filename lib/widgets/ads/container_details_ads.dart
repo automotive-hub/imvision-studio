@@ -26,9 +26,9 @@ class _ContainerDetailsAdsState extends State<ContainerDetailsAds> {
         }
       },
       child: Container(
-        width: 200,
+        width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        // padding: const EdgeInsets.symmetric(horizontal: 10),
         margin: const EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -36,7 +36,7 @@ class _ContainerDetailsAdsState extends State<ContainerDetailsAds> {
               color: Colors.deepPurple.shade400,
             )),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: 170,
@@ -52,16 +52,16 @@ class _ContainerDetailsAdsState extends State<ContainerDetailsAds> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+                          fontWeight: FontWeight.bold, color: Colors.white)
+                      .copyWith(),
                 ),
               ),
             ),
             const SizedBox(
               height: 5,
             ),
-            SizedBox(
-              width: 190,
-              height: 150,
+            AspectRatio(
+              aspectRatio: 3.75 / 2,
               child: VideoPlayerWidget(
                 videoStringUrl: widget.urlRender,
               ),

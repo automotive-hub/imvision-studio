@@ -58,34 +58,48 @@ class _ContentAdsState extends State<ContentAds> {
                   title: GlobalText.titleAds,
                   subTitle: widget.idVin,
                 ),
-                SizedBox(
-                  height: 200,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
+                Container(
+                  child: Wrap(
                     children: [
                       if (videoDataStringDesktop.isNotEmpty)
-                        ContainerDetailsAds(
-                          title: GlobalText.titleUrlVideoDesktop,
-                          urlRender: videoDataStringDesktop,
+                        Container(
+                          height: 250,
+                          width: 369,
+                          child: ContainerDetailsAds(
+                            title: GlobalText.titleUrlVideoDesktop,
+                            urlRender: videoDataStringDesktop,
+                          ),
                         ),
                       if (videoDataStringMobile.isNotEmpty)
-                        ContainerDetailsAds(
-                          title: GlobalText.titleUrlVideoMobile,
-                          urlRender: videoDataStringMobile,
+                        Container(
+                          height: 250,
+                          width: 369,
+                          child: ContainerDetailsAds(
+                            title: GlobalText.titleUrlVideoMobile,
+                            urlRender: videoDataStringMobile,
+                          ),
                         ),
                       if (videoDataStringMobile.isNotEmpty)
-                        ContainerDetailsAds(
-                          title: GlobalText.titleUrlGif,
-                          urlRender: gifRefString,
+                        Container(
+                          height: 250,
+                          width: 369,
+                          child: ContainerDetailsAds(
+                            title: GlobalText.titleUrlGif,
+                            urlRender: gifRefString,
+                          ),
                         ),
                       if (videoDataStringMobile.isNotEmpty)
-                        ContainerDetailsAds(
-                          title: GlobalText.titleUrlBanner,
-                          urlRender: bannerRefString,
+                        Container(
+                          height: 250,
+                          width: 369,
+                          child: ContainerDetailsAds(
+                            title: GlobalText.titleUrlBanner,
+                            urlRender: bannerRefString,
+                          ),
                         ),
                     ],
                   ),
-                ),
+                )
               ],
             ),
           )

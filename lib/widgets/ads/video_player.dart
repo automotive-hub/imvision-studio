@@ -22,8 +22,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.network(widget.videoStringUrl);
+    _controller.setVolume(0);
     _initializeVideoPlayerFuture = _controller.initialize();
-    _controller.setLooping(true);
+    // _controller.setLooping(true);
   }
 
   @override
@@ -43,7 +44,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               future: _initializeVideoPlayerFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  return VideoPlayer(_controller);
+                  return Align(
+                      alignment: Alignment.topLeft,
+                      child: VideoPlayer(_controller));
                 } else {
                   return const Center(
                     child: CircularProgressIndicator(),

@@ -7,7 +7,7 @@ class TitleWidget extends StatelessWidget {
   String subTitle;
   TitleWidget({super.key, required this.title, this.subTitle = ''});
   final titleTextStyle = const TextStyle(
-      color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20);
+      color: Colors.white, fontWeight: FontWeight.bold, fontSize: 35);
   final subTitleTextStyle = const TextStyle(
       color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 17);
   @override
