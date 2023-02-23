@@ -114,7 +114,7 @@ class _DashBoardTestState extends State<DashBoardTest> {
                     ),
                     DebugVIN(
                       styleTitle: styleTitle,
-                      vin: '3FA6P0G76JR114164_1677045877334',
+                      vin: '1FTER4FH1MLD65064_1677140984969',
                     ),
                   ]),
             ),

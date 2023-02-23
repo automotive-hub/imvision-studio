@@ -121,6 +121,7 @@ class _ContentClassificationState extends State<ContentClassification> {
                             height: 200,
                             width: double.infinity,
                             child: ListView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
                                 itemCount: element.value.length,

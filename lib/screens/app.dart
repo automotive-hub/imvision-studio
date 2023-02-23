@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:imvision_studio/screens/test.dart';
 
+import '../constants/global_constants.dart';
 import 'dashboard.dart';
 
 class App extends StatelessWidget {
@@ -11,7 +13,15 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Innovation Q1 - 2023',
+      title: ContactInformation.productName,
+      scrollBehavior: MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
+      ),
       theme: ThemeData.dark(
         useMaterial3: true,
       ).copyWith(textTheme: GoogleFonts.montserratTextTheme()),
