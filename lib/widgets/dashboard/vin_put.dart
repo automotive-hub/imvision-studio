@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:imvision_studio/services/firestore_database.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class VehicleVINInput extends StatefulWidget {
   const VehicleVINInput({super.key});
@@ -37,10 +38,33 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
             border: InputBorder.none,
             fillColor: const Color(0xfff3f3f4),
             filled: true),
-        onSubmitted: (vin) async =>
-            {print("Searching for " + vin), await db.init(vin: vin)},
+        onSubmitted: (vin) async {
+          print("Searching for " + vin);
+          final vinWithSalt = handleVIN(vin);
+          await submitVin(vinWithSalt);
+          await db.init(vin: vinWithSalt);
+        },
       ),
     );
+  }
+
+  String handleVIN(String vin) {
+    final vinWithSalt = '${vin}_${DateTime.now().millisecondsSinceEpoch}';
+    return vinWithSalt;
+  }
+
+  Future<bool> submitVin(String vinId) async {
+    String url = 'https://staging.imvision-hackathon.tech/dummy/';
+    // String url = 'https://34.27.27.160/dummy/';
+    final response = await http.post(Uri.parse(url + vinId),
+        headers: {'Access-Control-Allow-Origin': '*'});
+
+    if (response.statusCode == 200) {
+      print(response);
+      return true;
+    } else {
+      throw Exception('Failed to load album');
+    }
   }
 }
 

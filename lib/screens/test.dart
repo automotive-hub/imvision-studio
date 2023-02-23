@@ -68,30 +68,7 @@ class _DashBoardTestState extends State<DashBoardTest> {
                   children: [
                     InfoCorner(),
                     const SizedBox(height: paddingWithTitle),
-                    TextField(
-                      controller: textControllerVin,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter your VIN',
-                      ),
-                      onSubmitted: (value) async {
-                        vin = '3FA6P0G76JR114164_1677045877334';
-                        // '3FA6P0G76JR114164_${DateTime.now().millisecondsSinceEpoch}';
-
-                        await submitVin(vin);
-                        // ignore: use_build_context_synchronously
-                        context.read<FireStoreDatabase>().init(vin: vin);
-                        // ignore: use_build_context_synchronously
-                        context
-                            .read<FireStoreDatabase>()
-                            .generationStatusStream
-                            .listen((event) {
-                          print(event.toJson());
-                          isClassificationDone = event.classification == 'done';
-                          setState(() {});
-                        });
-                      },
-                    ),
+                    const VehicleVINInput(),
                     const SizedBox(
                       height: marginContainerDetails,
                     ),
