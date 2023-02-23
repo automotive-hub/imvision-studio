@@ -176,7 +176,7 @@ class DebugVIN extends StatelessWidget {
                     .read<FireStoreDatabase>()
                     .generationStatusStream
                     .listen((event) {
-                  print(event.toJson());
+                  print(vin + event.toJson().toString());
                 });
               },
               child: Text(
