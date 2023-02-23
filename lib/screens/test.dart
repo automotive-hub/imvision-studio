@@ -23,6 +23,11 @@ class DashBoardTest extends StatefulWidget {
 
 class _DashBoardTestState extends State<DashBoardTest> {
   Widget switchWidget = ShimmerDefaultCustom();
+  callbackSwitchWidget(newWidget) {
+    setState(() {
+      switchWidget = newWidget;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,31 +64,6 @@ class _DashBoardTestState extends State<DashBoardTest> {
                   children: [
                     InfoCorner(),
                     const SizedBox(height: paddingWithTitle),
-                    const MenuButton(
-                      menuType: AppMenu.download,
-                      title: GlobalText.titleDownload,
-                    ),
-                    const SizedBox(
-                      height: marginContainerDetails,
-                    ),
-                    const MenuButton(
-                      menuType: AppMenu.classification,
-                      title: GlobalText.titleClassification,
-                    ),
-                    const SizedBox(
-                      height: marginContainerDetails,
-                    ),
-                    const MenuButton(
-                      menuType: AppMenu.video,
-                      title: GlobalText.titleAds,
-                    ),
-                    const SizedBox(
-                      height: marginContainerDetails,
-                    ),
-                    DebugVIN(
-                      styleTitle: styleTitle,
-                      vin: '2G61N5S36J9156077_C99001',
-                    ),
                     TextButton(
                         onPressed: () async {
                           vin = '3FA6P0G76JR114164_1677045877334';
@@ -104,8 +84,40 @@ class _DashBoardTestState extends State<DashBoardTest> {
                           GlobalText.titleDashboard,
                           style: styleTitle.copyWith(color: Colors.grey),
                         )),
+                    MenuButton(
+                      menuType: AppMenu.download,
+                      title: GlobalText.titleDownload,
+                      switchWidget: callbackSwitchWidget,
+                    ),
                     const SizedBox(
                       height: marginContainerDetails,
+                    ),
+                    MenuButton(
+                      menuType: AppMenu.classification,
+                      title: GlobalText.titleClassification,
+                      switchWidget: callbackSwitchWidget,
+                    ),
+                    const SizedBox(
+                      height: marginContainerDetails,
+                    ),
+                    MenuButton(
+                      menuType: AppMenu.video,
+                      title: GlobalText.titleAds,
+                      switchWidget: callbackSwitchWidget,
+                    ),
+                    const SizedBox(
+                      height: marginContainerDetails,
+                    ),
+                    DebugVIN(
+                      styleTitle: styleTitle,
+                      vin: '2G61N5S36J9156077_C99001',
+                    ),
+                    const SizedBox(
+                      height: marginContainerDetails,
+                    ),
+                    DebugVIN(
+                      styleTitle: styleTitle,
+                      vin: '3FA6P0G76JR114164_1677045877334',
                     ),
                     TextButton(
                         onPressed: () {
@@ -135,10 +147,6 @@ class _DashBoardTestState extends State<DashBoardTest> {
                         )),
                     const SizedBox(
                       height: marginContainerDetails,
-                    ),
-                    DebugVIN(
-                      styleTitle: styleTitle,
-                      vin: '3FA6P0G76JR114164_1677045877334',
                     ),
                   ]),
             ),

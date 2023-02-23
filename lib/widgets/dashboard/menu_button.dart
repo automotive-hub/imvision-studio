@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:imvision_studio/services/firestore_database.dart';
+import 'package:imvision_studio/widgets/content_download.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/global_constants.dart';
 import '../../models/status_model.dart';
+import '../content_classification.dart';
+import '../shimmer_default.dart';
 
 class MenuButton extends StatefulWidget {
   final AppMenu menuType;
   final String title;
-  const MenuButton({super.key, required this.menuType, required this.title});
+  final Function(Widget)? switchWidget;
+  const MenuButton(
+      {super.key,
+      required this.menuType,
+      required this.title,
+      this.switchWidget});
 
   @override
   State<MenuButton> createState() => _MenuButtonState();
@@ -39,7 +47,11 @@ class _MenuButtonState extends State<MenuButton> {
               children: [
                 TextButton(
                     onPressed: () {
-                      print('Dash board');
+                      if ((isDone || isLoading) &&
+                          widget.switchWidget != null) {
+                        switchWidgetCase(
+                            widget.menuType, isLoading, isDone, '123');
+                      }
                     },
                     child: Text(
                       widget.title,
@@ -99,6 +111,28 @@ class _MenuButtonState extends State<MenuButton> {
         isLoading = false;
 
         break;
+      default:
+    }
+  }
+
+  switchWidgetCase(AppMenu menu, bool isLoading, bool isDone, String vinId) {
+    final AppMenu menuData = menu;
+    switch (menuData) {
+      case AppMenu.classification:
+        return widget.switchWidget!(ContentClassification(
+          isInprogress: isLoading,
+          isDone: isDone,
+          vinId: vinId,
+        ));
+      case AppMenu.download:
+        return widget.switchWidget!(ContentDownloadWidget());
+
+      // case AppMenu.video:
+      //         return widget.switchWidget!(ContentClassification())
+
+      // case AppMenu.ads:
+      //        return widget.switchWidget!(ContentClassification())
+
       default:
     }
   }
