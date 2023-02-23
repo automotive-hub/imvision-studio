@@ -61,6 +61,8 @@ class _ContentClassificationState extends State<ContentClassification> {
   List<MapEntry<String, List<dynamic>>> widgetBuilders = [];
   final textStyleTitle = const TextStyle(
       color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20);
+  final subTitleTextStyle = const TextStyle(
+      color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 17);
   final Color colorsForceBackgroundTitle =
       Colors.deepPurpleAccent.withOpacity(0.7);
   bool stateDone = false;
@@ -107,12 +109,23 @@ class _ContentClassificationState extends State<ContentClassification> {
                     if (element.value.isNotEmpty)
                       Wrap(
                         children: [
-                          Container(
-                            color: colorsForceBackgroundTitle,
-                            child: Text(
-                              element.key,
-                              style: textStyleTitle,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                color: colorsForceBackgroundTitle,
+                                child: Text(
+                                  element.key,
+                                  style: textStyleTitle,
+                                ),
+                              ),
+                              Text(
+                                element.value.length <= 10
+                                    ? 'Total Images: ${element.value.length.toString().padLeft(2, '0')}'
+                                    : 'Total Images: ${element.value.length.toString()}',
+                                style: subTitleTextStyle,
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 10,
