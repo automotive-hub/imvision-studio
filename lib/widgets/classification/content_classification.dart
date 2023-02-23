@@ -4,10 +4,10 @@ import 'package:imvision_studio/widgets/shimmer.dart';
 import 'package:imvision_studio/widgets/shimmer_default.dart';
 import 'package:provider/provider.dart';
 
-import '../constants/global_constants.dart';
-import '../services/firestore_database.dart';
-import 'divider.dart';
-import 'title_stepper.dart';
+import '../../constants/global_constants.dart';
+import '../../services/firestore_database.dart';
+import '../divider.dart';
+import '../title_custom_widget.dart';
 
 // ignore: must_be_immutable
 class ContentClassification extends StatefulWidget {
@@ -102,9 +102,6 @@ class _ContentClassificationState extends State<ContentClassification> {
                   TitleWidget(
                     title: GlobalText.titleClassification,
                     subTitle: widget.vinId,
-                  ),
-                  const SizedBox(
-                    height: 20,
                   ),
                   for (var element in widgetBuilders)
                     if (element.value.isNotEmpty)

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/global_constants.dart';
 import '../services/firestore_database.dart';
-import '../widgets/content_classification.dart';
+import '../widgets/classification/content_classification.dart';
 import '../widgets/dashboard/info_corner.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,6 +23,8 @@ class DashBoardTest extends StatefulWidget {
 }
 
 class _DashBoardTestState extends State<DashBoardTest> {
+  final textControllerVin = TextEditingController();
+
   Widget switchWidget = ShimmerDefaultCustom();
   callbackSwitchWidget(newWidget) {
     setState(() {
@@ -30,9 +32,10 @@ class _DashBoardTestState extends State<DashBoardTest> {
     });
   }
 
+  String vin = '';
+
   @override
   Widget build(BuildContext context) {
-    String vin = '';
     const double paddingWithTitle = 100;
     final double getSizeScreen = MediaQuery.of(context).size.width;
     final double sizeContainerButllet = getSizeScreen / 6;
@@ -65,30 +68,42 @@ class _DashBoardTestState extends State<DashBoardTest> {
                   children: [
                     InfoCorner(),
                     const SizedBox(height: paddingWithTitle),
-                    VehicleVINInput(),
+                    TextField(
+                      controller: textControllerVin,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter your VIN',
+                      ),
+                      onSubmitted: (value) async {
+                        vin = '3FA6P0G76JR114164_1677045877334';
+                        // '3FA6P0G76JR114164_${DateTime.now().millisecondsSinceEpoch}';
+
+                        await submitVin(vin);
+                        // ignore: use_build_context_synchronously
+                        context.read<FireStoreDatabase>().init(vin: vin);
+                        // ignore: use_build_context_synchronously
+                        context
+                            .read<FireStoreDatabase>()
+                            .generationStatusStream
+                            .listen((event) {
+                          print(event.toJson());
+                          isClassificationDone = event.classification == 'done';
+                          setState(() {});
+                        });
+                      },
+                    ),
                     const SizedBox(
                       height: marginContainerDetails,
                     ),
-                    // TextButton(
-                    //     onPressed: () async {
-                    //       vin = '3FA6P0G76JR114164_1677045877334';
-                    //       // '3FA6P0G76JR114164_${DateTime.now().millisecondsSinceEpoch}';
-                    //       await submitVin(vin);
-                    //       context.read<FireStoreDatabase>().init(vin: vin);
-                    //       context
-                    //           .read<FireStoreDatabase>()
-                    //           .generationStatusStream
-                    //           .listen((event) {
-                    //         print(event.toJson());
-                    //         isClassificationDone =
-                    //             event.classification == 'done';
-                    //         setState(() {});
-                    //       });
-                    //     },
-                    //     child: Text(
-                    //       GlobalText.titleDashboard,
-                    //       style: styleTitle.copyWith(color: Colors.grey),
-                    //     )),
+                    TextButton(
+                        onPressed: () async {},
+                        child: Text(
+                          GlobalText.titleDashboard,
+                          style: styleTitle.copyWith(color: Colors.grey),
+                        )),
+                    const SizedBox(
+                      height: marginContainerDetails,
+                    ),
                     MenuButton(
                       menuType: AppMenu.download,
                       title: GlobalText.titleDownload,
@@ -123,35 +138,6 @@ class _DashBoardTestState extends State<DashBoardTest> {
                     DebugVIN(
                       styleTitle: styleTitle,
                       vin: '3FA6P0G76JR114164_1677045877334',
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          setState(() {
-                            switchWidget = ContentDownloadWidget();
-                          });
-                        },
-                        child: const Text(
-                          GlobalText.titleDownload,
-                          style: styleTitle,
-                        )),
-                    const SizedBox(
-                      height: marginContainerDetails,
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          switchWidget = ContentClassification(
-                            isDone: true,
-                            isInprogress: isClassificationInprocess,
-                            vinId: vin,
-                          );
-                          setState(() {});
-                        },
-                        child: const Text(
-                          GlobalText.titleClassification,
-                          style: styleTitle,
-                        )),
-                    const SizedBox(
-                      height: marginContainerDetails,
                     ),
                   ]),
             ),

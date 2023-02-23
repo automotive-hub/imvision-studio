@@ -26,6 +26,9 @@ class TitleWidget extends StatelessWidget {
           GlobalText.vinId.replaceAll('#', subTitle),
           style: subTitleTextStyle,
         ),
+        const SizedBox(
+          height: 20,
+        ),
       ],
     );
   }

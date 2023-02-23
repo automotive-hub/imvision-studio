@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../constants/global_constants.dart';
 import '../../models/status_model.dart';
-import '../content_classification.dart';
+import '../ads/content_ads.dart';
+import '../classification/content_classification.dart';
 import '../shimmer_default.dart';
 
 class MenuButton extends StatefulWidget {
@@ -127,11 +128,12 @@ class _MenuButtonState extends State<MenuButton> {
       case AppMenu.download:
         return widget.switchWidget!(ContentDownloadWidget());
 
-      // case AppMenu.video:
-      //         return widget.switchWidget!(ContentClassification())
-
-      // case AppMenu.ads:
-      //        return widget.switchWidget!(ContentClassification())
+      case AppMenu.video:
+        return widget.switchWidget!(ContentAds(
+          idVin: vinId,
+          isInprogress: isLoading,
+          isDone: isDone,
+        ));
 
       default:
     }
