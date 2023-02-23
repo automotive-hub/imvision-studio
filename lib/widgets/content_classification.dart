@@ -141,7 +141,7 @@ class _ContentClassificationState extends State<ContentClassification> {
                                                   'assets/images/error_images.png')),
                                     ),
                                   );
-                                  return null;
+                                  return Container();
                                 }),
                           ),
                           const DividerCustom(),

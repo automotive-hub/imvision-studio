@@ -12,6 +12,7 @@ import '../widgets/dashboard/info_corner.dart';
 import 'package:http/http.dart' as http;
 
 import '../widgets/dashboard/menu_button.dart';
+import '../widgets/dashboard/vin_put.dart';
 import '../widgets/shimmer_default.dart';
 
 class DashBoardTest extends StatefulWidget {
@@ -64,26 +65,30 @@ class _DashBoardTestState extends State<DashBoardTest> {
                   children: [
                     InfoCorner(),
                     const SizedBox(height: paddingWithTitle),
-                    TextButton(
-                        onPressed: () async {
-                          vin = '3FA6P0G76JR114164_1677045877334';
-                          // '3FA6P0G76JR114164_${DateTime.now().millisecondsSinceEpoch}';
-                          await submitVin(vin);
-                          context.read<FireStoreDatabase>().init(vin: vin);
-                          context
-                              .read<FireStoreDatabase>()
-                              .generationStatusStream
-                              .listen((event) {
-                            print(event.toJson());
-                            isClassificationDone =
-                                event.classification == 'done';
-                            setState(() {});
-                          });
-                        },
-                        child: Text(
-                          GlobalText.titleDashboard,
-                          style: styleTitle.copyWith(color: Colors.grey),
-                        )),
+                    VehicleVINInput(),
+                    const SizedBox(
+                      height: marginContainerDetails,
+                    ),
+                    // TextButton(
+                    //     onPressed: () async {
+                    //       vin = '3FA6P0G76JR114164_1677045877334';
+                    //       // '3FA6P0G76JR114164_${DateTime.now().millisecondsSinceEpoch}';
+                    //       await submitVin(vin);
+                    //       context.read<FireStoreDatabase>().init(vin: vin);
+                    //       context
+                    //           .read<FireStoreDatabase>()
+                    //           .generationStatusStream
+                    //           .listen((event) {
+                    //         print(event.toJson());
+                    //         isClassificationDone =
+                    //             event.classification == 'done';
+                    //         setState(() {});
+                    //       });
+                    //     },
+                    //     child: Text(
+                    //       GlobalText.titleDashboard,
+                    //       style: styleTitle.copyWith(color: Colors.grey),
+                    //     )),
                     MenuButton(
                       menuType: AppMenu.download,
                       title: GlobalText.titleDownload,

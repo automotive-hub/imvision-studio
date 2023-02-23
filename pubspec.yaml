@@ -47,6 +47,7 @@ dependencies:
   google_fonts: ^4.0.3
   rxdart:
   provider:
+  shared_preferences_web:
 
 dev_dependencies:
   flutter_test:
