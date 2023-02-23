@@ -58,7 +58,7 @@ class _ContentClassificationState extends State<ContentClassification> {
     'MID_CENTER_POINT': [],
   };
 
-  late List<MapEntry<String, List<dynamic>>> widgetBuilders;
+  List<MapEntry<String, List<dynamic>>> widgetBuilders = [];
   final textStyleTitle = const TextStyle(
       color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20);
   final Color colorsForceBackgroundTitle =
@@ -125,7 +125,7 @@ class _ContentClassificationState extends State<ContentClassification> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: element.value.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  Padding(
+                                  return Padding(
                                     padding: const EdgeInsets.only(right: 5),
                                     child: CachedNetworkImage(
                                       imageUrl: element.value[index],
@@ -138,7 +138,6 @@ class _ContentClassificationState extends State<ContentClassification> {
                                                   'assets/images/error_images.png')),
                                     ),
                                   );
-                                  return Container();
                                 }),
                           ),
                           const DividerCustom(),

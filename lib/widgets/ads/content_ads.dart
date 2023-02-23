@@ -73,12 +73,12 @@ class _ContentAdsState extends State<ContentAds> {
                           title: GlobalText.titleUrlVideoMobile,
                           urlRender: videoDataStringMobile,
                         ),
-                      if (videoDataStringMobile.isNotEmpty)
+                      if (gifRefString.isNotEmpty)
                         ContainerDetailsAds(
                           title: GlobalText.titleUrlGif,
                           urlRender: gifRefString,
                         ),
-                      if (videoDataStringMobile.isNotEmpty)
+                      if (bannerRefString.isNotEmpty)
                         ContainerDetailsAds(
                           title: GlobalText.titleUrlBanner,
                           urlRender: bannerRefString,
