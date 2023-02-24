@@ -1,33 +1,64 @@
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
+import 'package:imvision_studio/widgets/title_custom_widget.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
-class ContentDownloadWidget extends StatelessWidget {
-  const ContentDownloadWidget({super.key});
+import '../constants/global_constants.dart';
+import '../services/firestore_database.dart';
+import 'box_content_download.dart';
+
+class ContentDownloadWidget extends StatefulWidget {
+  String idVin;
+  ContentDownloadWidget({super.key, required this.idVin});
+
+  @override
+  State<ContentDownloadWidget> createState() => _ContentDownloadWidgetState();
+}
+
+class _ContentDownloadWidgetState extends State<ContentDownloadWidget> {
+  var totalImage = 0;
+  var imageCounter = 0;
+  var predictionCounter = 0;
+  var predictionTotal = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          height: 200,
-          child: CircularPercentIndicator(
-            radius: 70.0,
-            lineWidth: 13.0,
-            animation: true,
-            percent: 0.2,
-            center: const Text(
-              "1/2",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+    context.read<FireStoreDatabase>().generationStatusStream.listen((event) {
+      totalImage = event.imageTotal;
+      imageCounter = event.imageCounter;
+      predictionCounter = event.predictionCounter;
+      predictionTotal = event.predictionTotal;
+      setState(() {});
+    });
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TitleWidget(
+              title: GlobalText.titleDownload,
+              subTitle: widget.idVin,
             ),
-            footer: const Text(
-              "Image Fetching",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+            const SizedBox(
+              height: 20,
             ),
-            circularStrokeCap: CircularStrokeCap.round,
-            progressColor: Colors.purple,
-          ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                BoxContentDownloadWidget(
+                  firstTitle: DownloadText.fetchImages,
+                  secondTitle: DownloadText.totalImages,
+                  firstValue: imageCounter,
+                  secondValue: totalImage,
+                ),
+              ],
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

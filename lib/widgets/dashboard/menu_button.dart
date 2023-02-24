@@ -15,10 +15,12 @@ class MenuButton extends StatefulWidget {
   final AppMenu menuType;
   final String title;
   final Function(Widget)? switchWidget;
+  final String idVin;
   const MenuButton(
       {super.key,
       required this.menuType,
       required this.title,
+      required this.idVin,
       this.switchWidget});
 
   @override
@@ -51,7 +53,7 @@ class _MenuButtonState extends State<MenuButton> {
                       if ((isDone || isLoading) &&
                           widget.switchWidget != null) {
                         switchWidgetCase(
-                            widget.menuType, isLoading, isDone, '123');
+                            widget.menuType, isLoading, isDone, widget.idVin);
                       }
                     },
                     child: Text(
@@ -126,7 +128,7 @@ class _MenuButtonState extends State<MenuButton> {
           vinId: vinId,
         ));
       case AppMenu.download:
-        return widget.switchWidget!(ContentDownloadWidget());
+        return widget.switchWidget!(ContentDownloadWidget(idVin: vinId,));
 
       case AppMenu.video:
         return widget.switchWidget!(ContentAds(

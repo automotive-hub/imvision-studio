@@ -38,3 +38,10 @@ class ClassificationtText {
   static const rightPanel = "RIGHT_PANEL";
   static const midCenterPoint = "MID_CENTER_POINT";
 }
+
+class DownloadText {
+  static const fetchImages = "Current Fetch Images";
+  static const totalImages = "Total Images";
+  static const currentPrediction = "Current Prediction";
+  static const totalPrediction = "Total Prediction";
+}

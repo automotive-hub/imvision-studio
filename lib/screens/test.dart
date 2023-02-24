@@ -33,6 +33,11 @@ class _DashBoardTestState extends State<DashBoardTest> {
   }
 
   String vin = '';
+  callbackVinNumber(vinNumberInput) {
+    setState(() {
+      vin = vinNumberInput;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +73,9 @@ class _DashBoardTestState extends State<DashBoardTest> {
                   children: [
                     InfoCorner(),
                     const SizedBox(height: paddingWithTitle),
-                    const VehicleVINInput(),
+                    VehicleVINInput(
+                      vinNumber: callbackVinNumber,
+                    ),
                     const SizedBox(
                       height: marginContainerDetails,
                     ),
@@ -85,6 +92,7 @@ class _DashBoardTestState extends State<DashBoardTest> {
                       menuType: AppMenu.download,
                       title: GlobalText.titleDownload,
                       switchWidget: callbackSwitchWidget,
+                      idVin: vin,
                     ),
                     const SizedBox(
                       height: marginContainerDetails,
@@ -93,6 +101,7 @@ class _DashBoardTestState extends State<DashBoardTest> {
                       menuType: AppMenu.classification,
                       title: GlobalText.titleClassification,
                       switchWidget: callbackSwitchWidget,
+                      idVin: vin,
                     ),
                     const SizedBox(
                       height: marginContainerDetails,
@@ -101,6 +110,7 @@ class _DashBoardTestState extends State<DashBoardTest> {
                       menuType: AppMenu.video,
                       title: GlobalText.titleAds,
                       switchWidget: callbackSwitchWidget,
+                      idVin: vin,
                     ),
                     const SizedBox(
                       height: marginContainerDetails,
