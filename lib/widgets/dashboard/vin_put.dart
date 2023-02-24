@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:imvision_studio/services/firestore_database.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class VehicleVINInput extends StatefulWidget {
   final Function(String)? vinNumber;

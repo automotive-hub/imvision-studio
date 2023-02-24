@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:imvision_studio/widgets/shimmer.dart';
-import 'package:imvision_studio/widgets/shimmer_default.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/global_constants.dart';
-import '../../models/ads_model.dart';
 import '../../services/firestore_database.dart';
 import '../title_custom_widget.dart';
 import 'container_details_ads.dart';

@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:imvision_studio/models/status_model.dart';
-import 'package:imvision_studio/widgets/content_download.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/global_constants.dart';
 import '../services/firestore_database.dart';
-import '../widgets/classification/content_classification.dart';
 import '../widgets/dashboard/info_corner.dart';
-import 'package:http/http.dart' as http;
-
 import '../widgets/dashboard/menu_button.dart';
 import '../widgets/dashboard/vin_put.dart';
 import '../widgets/shimmer_default.dart';
 
-class DashBoardTest extends StatefulWidget {
-  const DashBoardTest({super.key});
+class CoreScreen extends StatefulWidget {
+  const CoreScreen({super.key});
 
   @override
-  State<DashBoardTest> createState() => _DashBoardTestState();
+  State<CoreScreen> createState() => _CoreScreenState();
 }
 
-class _DashBoardTestState extends State<DashBoardTest> {
+class _CoreScreenState extends State<CoreScreen> {
   final textControllerVin = TextEditingController();
 
   Widget switchWidget = ShimmerDefaultCustom();
@@ -49,10 +43,7 @@ class _DashBoardTestState extends State<DashBoardTest> {
     const double marginContainerDetails = 20;
     const TextStyle styleTitle = TextStyle(
         fontWeight: FontWeight.bold, color: Colors.white, fontSize: 17);
-    const TextStyle styleEmailUser =
-        TextStyle(color: Colors.grey, fontSize: 12);
-    bool isClassificationDone = false;
-    bool isClassificationInprocess = false;
+        
     return Scaffold(
       backgroundColor: Colors.black,
       floatingActionButton: IconButton(
@@ -146,21 +137,6 @@ class _DashBoardTestState extends State<DashBoardTest> {
     );
   }
 
-  Future<bool> submitVin(String vinId) async {
-    // String url = 'https://staging.imvision-hackathon.tech/dummy/';
-    // // String url = 'http://34.136.157.18:5000/dummy/';
-
-    // final response = await http.post(Uri.parse(url + vinId),
-    //     headers: {'Access-Control-Allow-Origin': '*'});
-
-    // if (response.statusCode == 200) {
-    // response.body['message'] :
-    // print(response);
-    return true;
-    // } else {
-    //   throw Exception('Failed to load album');
-    // }
-  }
 }
 
 class DebugVIN extends StatelessWidget {

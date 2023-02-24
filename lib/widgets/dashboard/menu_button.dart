@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:imvision_studio/services/firestore_database.dart';
-import 'package:imvision_studio/widgets/content_download.dart';
+import 'package:imvision_studio/widgets/download/content_download.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants/global_constants.dart';
 import '../../models/status_model.dart';
 import '../ads/content_ads.dart';
 import '../classification/content_classification.dart';
-import '../shimmer_default.dart';
 
 class MenuButton extends StatefulWidget {
   final AppMenu menuType;

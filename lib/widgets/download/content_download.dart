@@ -1,11 +1,9 @@
-import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:imvision_studio/widgets/title_custom_widget.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-import '../constants/global_constants.dart';
-import '../services/firestore_database.dart';
+import '../../constants/global_constants.dart';
+import '../../services/firestore_database.dart';
 import 'box_content_download.dart';
 
 class ContentDownloadWidget extends StatefulWidget {

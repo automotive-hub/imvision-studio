@@ -1,10 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:imvision_studio/screens/test.dart';
+import 'package:imvision_studio/screens/core.dart';
 
 import '../constants/global_constants.dart';
-import 'dashboard.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -25,7 +24,7 @@ class App extends StatelessWidget {
       theme: ThemeData.dark(
         useMaterial3: true,
       ).copyWith(textTheme: GoogleFonts.montserratTextTheme()),
-      home: const DashBoardTest(),
+      home: const CoreScreen(),
     );
   }
 }
