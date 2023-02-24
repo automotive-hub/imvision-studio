@@ -12,6 +12,7 @@ class VehicleVINInput extends StatefulWidget {
 }
 
 class _VehicleVINInputState extends State<VehicleVINInput> {
+  String currentVin = '';
   final inputStyle = const TextStyle(
       fontWeight: FontWeight.w400, color: Colors.black, fontSize: 15);
   final textController = TextEditingController();
@@ -39,10 +40,13 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
             fillColor: const Color(0xfff3f3f4),
             filled: true),
         onSubmitted: (vin) async {
-          print("Searching for " + vin);
-          final vinWithSalt = handleVIN(vin);
-          await submitVin(vinWithSalt);
-          await db.init(vin: vinWithSalt);
+          if (vin != currentVin) {
+            print("Searching for " + vin);
+            final vinWithSalt = handleVIN(vin);
+            await submitVin(vinWithSalt);
+            await db.init(vin: vinWithSalt);
+            currentVin = vin;
+          }
         },
       ),
     );
