@@ -45,3 +45,11 @@ class DownloadText {
   static const currentPrediction = "Current Prediction";
   static const totalPrediction = "Total Prediction";
 }
+
+class DashboardText {
+  static const titleChecklist = "Status Checklist Current VIN";
+  static const statusDownload = "Download Status";
+  static const statusClassification = "Classification Status";
+  static const statusAds = "Ads Status";
+  static const currentVin = "Current VIN: ";
+}

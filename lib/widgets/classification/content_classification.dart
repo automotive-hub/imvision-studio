@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:imvision_studio/widgets/shimmer.dart';
-import 'package:imvision_studio/widgets/shimmer_default.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/global_constants.dart';
 import '../../services/firestore_database.dart';
 import '../divider.dart';
+import '../shimmer.dart';
+import '../shimmer_default.dart';
 import '../title_custom_widget.dart';
 
 // ignore: must_be_immutable
@@ -139,17 +140,27 @@ class _ContentClassificationState extends State<ContentClassification> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: element.value.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 5),
-                                    child: CachedNetworkImage(
-                                      imageUrl: element.value[index],
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              const ShimmerDefaultCustom(),
-                                      errorWidget: (context, url, error) =>
-                                          SizedBox(
-                                              child: Image.asset(
-                                                  'assets/images/error_images.png')),
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      showImageViewer(
+                                          context,
+                                          Image.network(element.value[index])
+                                              .image,
+                                          useSafeArea: true,
+                                          swipeDismissible: false);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 5),
+                                      child: CachedNetworkImage(
+                                        imageUrl: element.value[index],
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                const ShimmerDefaultCustom(),
+                                        errorWidget: (context, url, error) =>
+                                            SizedBox(
+                                                child: Image.asset(
+                                                    'assets/images/error_images.png')),
+                                      ),
                                     ),
                                   );
                                 }),

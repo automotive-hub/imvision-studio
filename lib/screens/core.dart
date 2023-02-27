@@ -4,9 +4,10 @@ import 'package:provider/provider.dart';
 
 import '../constants/global_constants.dart';
 import '../services/firestore_database.dart';
-import '../widgets/dashboard/info_corner.dart';
-import '../widgets/dashboard/menu_button.dart';
-import '../widgets/dashboard/vin_put.dart';
+import '../widgets/dashboard/dashboard_content.dart';
+import '../widgets/core/info_corner.dart';
+import '../widgets/core/menu_button.dart';
+import '../widgets/core/vin_put.dart';
 import '../widgets/shimmer_default.dart';
 
 class CoreScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _CoreScreenState extends State<CoreScreen> {
     const double marginContainerDetails = 20;
     const TextStyle styleTitle = TextStyle(
         fontWeight: FontWeight.bold, color: Colors.white, fontSize: 17);
-        
+
     return Scaffold(
       backgroundColor: Colors.black,
       floatingActionButton: IconButton(
@@ -56,7 +57,7 @@ class _CoreScreenState extends State<CoreScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 50, left: 50, right: 20),
-            child: Container(
+            child: SizedBox(
               width: sizeContainerButllet,
               height: double.infinity,
               child: Column(
@@ -71,10 +72,16 @@ class _CoreScreenState extends State<CoreScreen> {
                       height: marginContainerDetails,
                     ),
                     TextButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          switchWidget = DashBoardScreen(
+                            idVin: vin,
+                            callBackVin: callbackVinNumber,
+                          );
+                          setState(() {});
+                        },
                         child: Text(
                           GlobalText.titleDashboard,
-                          style: styleTitle.copyWith(color: Colors.grey),
+                          style: styleTitle.copyWith(color: Colors.white),
                         )),
                     const SizedBox(
                       height: marginContainerDetails,
@@ -136,7 +143,6 @@ class _CoreScreenState extends State<CoreScreen> {
       )),
     );
   }
-
 }
 
 class DebugVIN extends StatelessWidget {

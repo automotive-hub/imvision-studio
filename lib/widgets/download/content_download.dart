@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:imvision_studio/widgets/title_custom_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/global_constants.dart';
 import '../../services/firestore_database.dart';
+import '../title_custom_widget.dart';
 import 'box_content_download.dart';
 
 class ContentDownloadWidget extends StatefulWidget {
@@ -19,17 +19,26 @@ class _ContentDownloadWidgetState extends State<ContentDownloadWidget> {
   var imageCounter = 0;
   var predictionCounter = 0;
   var predictionTotal = 0;
-
+  bool isStreamDone = false;
   @override
   Widget build(BuildContext context) {
-    context.read<FireStoreDatabase>().generationStatusStream.listen((event) {
+    final streamStatus = context
+        .read<FireStoreDatabase>()
+        .generationStatusStream
+        .listen((event) {
       totalImage = event.imageTotal;
       imageCounter = event.imageCounter;
       predictionCounter = event.predictionCounter;
       predictionTotal = event.predictionTotal;
-      setState(() {});
-    });
 
+      setState(() {
+        if (event.video == 'done') {
+          isStreamDone = true;
+        }
+      });
+    });
+    streamStatus.cancel();
+    isStreamDone = false;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
@@ -43,16 +52,13 @@ class _ContentDownloadWidgetState extends State<ContentDownloadWidget> {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                BoxContentDownloadWidget(
-                  firstTitle: DownloadText.fetchImages,
-                  secondTitle: DownloadText.totalImages,
-                  firstValue: imageCounter,
-                  secondValue: totalImage,
-                ),
-              ],
+            Align(
+              alignment: Alignment.center,
+              child: BoxContentDownloadWidget(
+                firstTitle: DownloadText.fetchImages,
+                firstValue: imageCounter,
+                secondValue: totalImage,
+              ),
             ),
           ],
         ),

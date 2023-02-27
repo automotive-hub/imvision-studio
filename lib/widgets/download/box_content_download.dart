@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 
 class BoxContentDownloadWidget extends StatefulWidget {
   final String firstTitle;
-  final String secondTitle;
   final num firstValue;
   final num secondValue;
   const BoxContentDownloadWidget(
       {Key? key,
       required this.firstTitle,
-      required this.secondTitle,
       required this.firstValue,
       required this.secondValue})
       : super(key: key);
@@ -37,28 +35,15 @@ class _BoxContentDownloadWidgetState extends State<BoxContentDownloadWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(
-                width: 5,
-              ),
               Container(
                   margin: const EdgeInsets.only(top: 10),
                   color: Colors.deepPurple,
                   child: Text(
                     widget.firstTitle,
                     style: titleTextStyle,
-                  )),
-              const SizedBox(
-                width: 10,
-              ),
-              Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  color: Colors.deepPurple,
-                  child: Text(widget.secondTitle, style: titleTextStyle)),
-              const SizedBox(
-                width: 5,
-              ),
+                  ))
             ],
           ),
           const SizedBox(

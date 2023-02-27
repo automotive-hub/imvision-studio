@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:imvision_studio/widgets/shimmer.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/global_constants.dart';
 import '../../services/firestore_database.dart';
+import '../shimmer.dart';
 import '../title_custom_widget.dart';
 import 'container_details_ads.dart';
 
@@ -26,10 +26,12 @@ class _ContentAdsState extends State<ContentAds> {
   String videoDataStringMobile = '';
   String gifRefString = '';
   String bannerRefString = '';
+  bool isCancelStream = false;
 
   @override
   Widget build(BuildContext context) {
-    context.read<FireStoreDatabase>().generationAdsStream.listen((event) {
+    final adsStream =
+        context.read<FireStoreDatabase>().generationAdsStream.listen((event) {
       videoDataStringDesktop = event.desktopVideoRef;
       videoDataStringMobile = event.mobileVideoRef;
       gifRefString = event.gifRef;
@@ -42,9 +44,12 @@ class _ContentAdsState extends State<ContentAds> {
                 event.bannerRef.isNotEmpty)) {
           widget.isInprogress = false;
           widget.isDone = true;
+          isCancelStream = true;
         }
       });
     });
+    adsStream.cancel();
+    isCancelStream = false;
     return widget.isDone
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),

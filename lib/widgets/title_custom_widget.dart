@@ -5,7 +5,12 @@ import '../constants/global_constants.dart';
 class TitleWidget extends StatelessWidget {
   String title;
   String subTitle;
-  TitleWidget({super.key, required this.title, this.subTitle = ''});
+  bool isShowVin;
+  TitleWidget(
+      {super.key,
+      required this.title,
+      this.subTitle = '',
+      this.isShowVin = true});
   final titleTextStyle = const TextStyle(
       color: Colors.white, fontWeight: FontWeight.bold, fontSize: 35);
   final subTitleTextStyle = const TextStyle(
@@ -22,10 +27,11 @@ class TitleWidget extends StatelessWidget {
             style: titleTextStyle,
           ),
         ),
-        Text(
-          GlobalText.vinId.replaceAll('#', subTitle),
-          style: subTitleTextStyle,
-        ),
+        if (isShowVin)
+          Text(
+            GlobalText.vinId.replaceAll('#', subTitle),
+            style: subTitleTextStyle,
+          ),
         const SizedBox(
           height: 20,
         ),

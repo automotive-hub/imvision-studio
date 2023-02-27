@@ -49,6 +49,7 @@ dependencies:
   provider:
   shared_preferences_web:
   animated_flip_counter: ^0.2.5
+  easy_image_viewer: ^1.2.0
 
 dev_dependencies:
   flutter_test:

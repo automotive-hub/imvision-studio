@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:imvision_studio/widgets/ads/video_player.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import 'video_player.dart';
 
 class ContainerDetailsAds extends StatefulWidget {
   String title;
@@ -51,7 +52,6 @@ class _ContainerDetailsAdsState extends State<ContainerDetailsAds> {
                   maxLines: 2,
                   style: const TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white)
-                      .copyWith(),
                 ),
               ),
             ),

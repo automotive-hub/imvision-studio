@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:imvision_studio/services/firestore_database.dart';
-import 'package:imvision_studio/widgets/download/content_download.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/status_model.dart';
+import '../../services/firestore_database.dart';
 import '../ads/content_ads.dart';
 import '../classification/content_classification.dart';
+import '../download/content_download.dart';
 
 class MenuButton extends StatefulWidget {
   final AppMenu menuType;
@@ -124,7 +124,9 @@ class _MenuButtonState extends State<MenuButton> {
           vinId: vinId,
         ));
       case AppMenu.download:
-        return widget.switchWidget!(ContentDownloadWidget(idVin: vinId,));
+        return widget.switchWidget!(ContentDownloadWidget(
+          idVin: vinId,
+        ));
 
       case AppMenu.video:
         return widget.switchWidget!(ContentAds(

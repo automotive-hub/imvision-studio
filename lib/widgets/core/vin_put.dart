@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:imvision_studio/services/firestore_database.dart';
 import 'package:provider/provider.dart';
+
+import '../../services/firestore_database.dart';
+import '../dashboard/dashboard_content.dart';
 
 class VehicleVINInput extends StatefulWidget {
   final Function(String)? vinNumber;
-  const VehicleVINInput({super.key, this.vinNumber});
+  final Function(Widget)? switchWidget;
+
+  const VehicleVINInput({super.key, this.vinNumber, this.switchWidget});
 
   @override
   State<VehicleVINInput> createState() => _VehicleVINInputState();
@@ -15,6 +19,7 @@ class VehicleVINInput extends StatefulWidget {
 class _VehicleVINInputState extends State<VehicleVINInput> {
   bool isReadonly = false;
   bool isEnable = true;
+  bool isStreamDone = false;
   Color colorInput = Colors.white;
   final inputStyle = const TextStyle(
       fontWeight: FontWeight.w400, color: Colors.black, fontSize: 15);
@@ -54,7 +59,11 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
             await submitVin(vinWithSalt);
             await db.init(vin: vinWithSalt);
             // ignore: use_build_context_synchronously
-            context
+            widget.switchWidget!(DashBoardScreen(
+              idVin: vin,
+              callBackVin: widget.vinNumber,
+            ));
+            final streamStatus = context
                 .read<FireStoreDatabase>()
                 .generationStatusStream
                 .listen((event) {
@@ -64,9 +73,14 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
                 colorInput = Colors.white;
                 isReadonly = false;
                 isEnable = true;
+                isStreamDone = true;
                 setState(() {});
               }
             });
+            if (isStreamDone) {
+              streamStatus.cancel();
+              isStreamDone = false;
+            }
             setState(() {});
           }
         },
