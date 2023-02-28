@@ -48,8 +48,10 @@ class _ContentAdsState extends State<ContentAds> {
         }
       });
     });
-    adsStream.cancel();
-    isCancelStream = false;
+    if (isCancelStream) {
+      adsStream.cancel();
+      isCancelStream = false;
+    }
     return widget.isDone
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),

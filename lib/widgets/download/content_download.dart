@@ -37,8 +37,11 @@ class _ContentDownloadWidgetState extends State<ContentDownloadWidget> {
         }
       });
     });
-    streamStatus.cancel();
-    isStreamDone = false;
+    if (isStreamDone) {
+      streamStatus.cancel();
+      isStreamDone = false;
+    }
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
