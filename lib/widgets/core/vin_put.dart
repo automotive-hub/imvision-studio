@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../../services/firestore_database.dart';
-import '../dashboard/dashboard_content.dart';
 
 class VehicleVINInput extends StatefulWidget {
   final Function(String)? vinNumber;
@@ -37,8 +36,6 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
         ),
       ),
       child: TextField(
-        enabled: isEnable,
-        readOnly: isReadonly,
         controller: textController,
         textCapitalization: TextCapitalization.characters,
         style: inputStyle,
@@ -55,37 +52,9 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
         onSubmitted: (vin) async {
           if (vin.isNotEmpty) {
             widget.vinNumber!(vin);
-            isReadonly = true;
-            isEnable = false;
-            colorInput = Colors.white54;
             final vinWithSalt = handleVIN(vin);
             await submitVin(vinWithSalt);
             await db.init(vin: vinWithSalt);
-            // ignore: use_build_context_synchronously
-            widget.switchWidget!(DashBoardScreen(
-              idVin: vin,
-              callBackVin: widget.vinNumber,
-            ));
-            vin = '';
-            final streamStatus = context
-                .read<FireStoreDatabase>()
-                .generationStatusStream
-                .listen((event) {
-              if (event.download == 'processing') {
-                colorInput = Colors.white;
-                isReadonly = false;
-                isEnable = true;
-                isStreamDone = true;
-                setState(() {});
-              }
-            });
-            if (isStreamDone) {
-              streamStatus.cancel();
-              isStreamDone = false;
-            }
-            if (this.mounted) {
-              setState(() {});
-            }
           }
         },
       ),
@@ -104,8 +73,8 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
         headers: {'Access-Control-Allow-Origin': '*'});
 
     if (response.statusCode == 200) {
-    print(response);
-    return true;
+      print(response);
+      return true;
     } else {
       throw Exception('Failed to load album');
     }

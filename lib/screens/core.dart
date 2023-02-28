@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/global_constants.dart';
 import '../services/firestore_database.dart';
+import '../widgets/contributor_dialog.dart';
 import '../widgets/dashboard/dashboard_content.dart';
 import '../widgets/core/info_corner.dart';
 import '../widgets/core/menu_button.dart';
@@ -19,6 +20,7 @@ class CoreScreen extends StatefulWidget {
 
 class _CoreScreenState extends State<CoreScreen> {
   final textControllerVin = TextEditingController();
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Widget switchWidget = ShimmerDefaultCustom();
   callbackSwitchWidget(newWidget) {
@@ -56,11 +58,21 @@ class _CoreScreenState extends State<CoreScreen> {
         fontWeight: FontWeight.bold, color: Colors.white, fontSize: 17);
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.black,
       floatingActionButton: IconButton(
-          color: Colors.grey[200],
+          color: Colors.black,
           iconSize: 55,
-          onPressed: () {},
+          onPressed: () async {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.69,
+                      height: MediaQuery.of(context).size.height * 0.39,
+                      child: ContributorDialog());
+                });
+          },
           icon: const Icon(Icons.info)),
       body: SafeArea(
           child: Row(
