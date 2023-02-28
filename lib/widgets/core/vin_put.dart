@@ -34,8 +34,8 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
         ),
       ),
       child: TextField(
-        enabled: isEnable,
-        readOnly: isReadonly,
+        // enabled: isEnable,
+        // readOnly: isReadonly,
         controller: textController,
         textCapitalization: TextCapitalization.characters,
         style: inputStyle,
@@ -77,10 +77,10 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
                 setState(() {});
               }
             });
-            if (isStreamDone) {
-              streamStatus.cancel();
-              isStreamDone = false;
-            }
+            // if (isStreamDone) {
+            //   streamStatus.cancel();
+            //   isStreamDone = false;
+            // }
             setState(() {});
           }
         },

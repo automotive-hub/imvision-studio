@@ -37,10 +37,10 @@ class _ContentDownloadWidgetState extends State<ContentDownloadWidget> {
         }
       });
     });
-    if (isStreamDone) {
-      streamStatus.cancel();
-      isStreamDone = false;
-    }
+    // if (isStreamDone) {
+    //   streamStatus.cancel();
+    //   isStreamDone = false;
+    // }
 
     return SingleChildScrollView(
       child: Padding(
