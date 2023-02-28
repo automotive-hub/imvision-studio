@@ -30,17 +30,20 @@ class _ContentDownloadWidgetState extends State<ContentDownloadWidget> {
       imageCounter = event.imageCounter;
       predictionCounter = event.predictionCounter;
       predictionTotal = event.predictionTotal;
-
-      setState(() {
-        if (event.video == 'done') {
-          isStreamDone = true;
-        }
-      });
+      if (event.download == 'done') {
+        isStreamDone = true;
+      }
+      if (this.mounted) {
+        setState(() {});
+      }
     });
-    // if (isStreamDone) {
-    //   streamStatus.cancel();
-    //   isStreamDone = false;
-    // }
+    if (isStreamDone) {
+      isStreamDone = false;
+      streamStatus.cancel();
+      if (this.mounted) {
+        setState(() {});
+      }
+    }
 
     return SingleChildScrollView(
       child: Padding(

@@ -9,8 +9,9 @@ import '../dashboard/dashboard_content.dart';
 class VehicleVINInput extends StatefulWidget {
   final Function(String)? vinNumber;
   final Function(Widget)? switchWidget;
-
-  const VehicleVINInput({super.key, this.vinNumber, this.switchWidget});
+  final String idVin;
+  const VehicleVINInput(
+      {super.key, this.vinNumber, this.switchWidget, required this.idVin});
 
   @override
   State<VehicleVINInput> createState() => _VehicleVINInputState();
@@ -23,10 +24,12 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
   Color colorInput = Colors.white;
   final inputStyle = const TextStyle(
       fontWeight: FontWeight.w400, color: Colors.black, fontSize: 15);
-  final textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final db = context.read<FireStoreDatabase>();
+    final textController = TextEditingController(
+        text: widget.idVin.isNotEmpty ? widget.idVin : null);
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -34,8 +37,8 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
         ),
       ),
       child: TextField(
-        // enabled: isEnable,
-        // readOnly: isReadonly,
+        enabled: isEnable,
+        readOnly: isReadonly,
         controller: textController,
         textCapitalization: TextCapitalization.characters,
         style: inputStyle,
@@ -63,13 +66,12 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
               idVin: vin,
               callBackVin: widget.vinNumber,
             ));
+            vin = '';
             final streamStatus = context
                 .read<FireStoreDatabase>()
                 .generationStatusStream
                 .listen((event) {
-              if (event.download == 'done' &&
-                  event.classification == 'done' &&
-                  event.video == 'done') {
+              if (event.download == 'processing') {
                 colorInput = Colors.white;
                 isReadonly = false;
                 isEnable = true;
@@ -77,11 +79,13 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
                 setState(() {});
               }
             });
-            // if (isStreamDone) {
-            //   streamStatus.cancel();
-            //   isStreamDone = false;
-            // }
-            setState(() {});
+            if (isStreamDone) {
+              streamStatus.cancel();
+              isStreamDone = false;
+            }
+            if (this.mounted) {
+              setState(() {});
+            }
           }
         },
       ),
@@ -94,17 +98,17 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
   }
 
   Future<bool> submitVin(String vinId) async {
-    String url = 'https://staging.imvision-hackathon.tech/dummy/';
-    // String url = 'https://34.27.27.160/dummy/';
-    final response = await http.post(Uri.parse(url + vinId),
-        headers: {'Access-Control-Allow-Origin': '*'});
+    // String url = 'https://staging.imvision-hackathon.tech/dummy/';
+    // // String url = 'https://34.27.27.160/dummy/';
+    // final response = await http.post(Uri.parse(url + vinId),
+    //     headers: {'Access-Control-Allow-Origin': '*'});
 
-    if (response.statusCode == 200) {
-      print(response);
-      return true;
-    } else {
-      throw Exception('Failed to load album');
-    }
+    // if (response.statusCode == 200) {
+    // print(response);
+    return true;
+    // } else {
+    //   throw Exception('Failed to load album');
+    // }
   }
 }
 

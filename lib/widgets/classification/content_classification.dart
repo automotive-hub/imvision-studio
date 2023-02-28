@@ -86,13 +86,15 @@ class _ContentClassificationState extends State<ContentClassification> {
           return e;
         }).toList();
       }
-      setState(() {
-        widgetBuilders = positionWidgetRenderABC.entries.toList();
-        if (widget.isInprogress && event.exterior!.isNotEmpty) {
-          widget.isInprogress = false;
-          widget.isDone = true;
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          widgetBuilders = positionWidgetRenderABC.entries.toList();
+          if (widget.isInprogress && event.exterior!.isNotEmpty) {
+            widget.isInprogress = false;
+            widget.isDone = true;
+          }
+        });
+      }
     });
 
     return widget.isDone

@@ -36,22 +36,25 @@ class _ContentAdsState extends State<ContentAds> {
       videoDataStringMobile = event.mobileVideoRef;
       gifRefString = event.gifRef;
       bannerRefString = event.bannerRef;
-      setState(() {
-        if (widget.isInprogress &&
-            (event.desktopVideoRef.isNotEmpty ||
-                event.mobileVideoRef.isNotEmpty ||
-                event.gifRef.isNotEmpty ||
-                event.bannerRef.isNotEmpty)) {
-          widget.isInprogress = false;
-          widget.isDone = true;
-          isCancelStream = true;
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (widget.isInprogress &&
+              (event.desktopVideoRef.isNotEmpty ||
+                  event.mobileVideoRef.isNotEmpty ||
+                  event.gifRef.isNotEmpty ||
+                  event.bannerRef.isNotEmpty)) {
+            widget.isInprogress = false;
+            widget.isDone = true;
+            isCancelStream = true;
+          }
+        });
+      }
     });
-    // if (isCancelStream) {
-    //   adsStream.cancel();
-    //   isCancelStream = false;
-    // }
+    if (isCancelStream) {
+      isCancelStream = false;
+      adsStream.cancel();
+      if (this.mounted) setState(() {});
+    }
     return widget.isDone
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),

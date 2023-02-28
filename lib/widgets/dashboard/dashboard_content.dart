@@ -26,6 +26,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   var listDocument = [];
   @override
   Widget build(BuildContext context) {
+    String currentVin = widget.idVin;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
@@ -65,8 +66,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                               await context
                                   .read<FireStoreDatabase>()
                                   .init(vin: widget.idVin);
+                              setState(() {});
                             },
-                            child: Text(widget.idVin,
+                            child: Text(currentVin,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 style: const TextStyle(
@@ -114,6 +116,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                 widget.callBackVin!(
                                                     snapshot.data![index].id);
                                               }
+                                              currentVin =
+                                                  snapshot.data![index].id;
+                                              setState(() {});
                                             },
                                             child: Text(
                                                 snapshot.data![index].id

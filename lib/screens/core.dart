@@ -22,16 +22,26 @@ class _CoreScreenState extends State<CoreScreen> {
 
   Widget switchWidget = ShimmerDefaultCustom();
   callbackSwitchWidget(newWidget) {
-    setState(() {
-      switchWidget = newWidget;
-    });
+    if (this.mounted) {
+      setState(() {
+        switchWidget = newWidget;
+      });
+    }
   }
 
   String vin = '';
   callbackVinNumber(vinNumberInput) {
-    setState(() {
+    if (this.mounted) {
       vin = vinNumberInput;
-    });
+
+      final screenName = switchWidget.toString();
+      if (screenName == 'DashBoardScreen') {
+        switchWidget =
+            DashBoardScreen(idVin: vin, callBackVin: callbackVinNumber);
+      }
+      print(switchWidget.toString());
+      setState(() {});
+    }
   }
 
   @override
@@ -67,6 +77,8 @@ class _CoreScreenState extends State<CoreScreen> {
                     const SizedBox(height: paddingWithTitle),
                     VehicleVINInput(
                       vinNumber: callbackVinNumber,
+                      switchWidget: callbackSwitchWidget,
+                      idVin: vin,
                     ),
                     const SizedBox(
                       height: marginContainerDetails,
