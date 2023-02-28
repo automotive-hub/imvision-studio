@@ -98,17 +98,17 @@ class _VehicleVINInputState extends State<VehicleVINInput> {
   }
 
   Future<bool> submitVin(String vinId) async {
-    // String url = 'https://staging.imvision-hackathon.tech/dummy/';
-    // // String url = 'https://34.27.27.160/dummy/';
-    // final response = await http.post(Uri.parse(url + vinId),
-    //     headers: {'Access-Control-Allow-Origin': '*'});
+    String url = 'https://staging.imvision-hackathon.tech/dummy/';
+    // String url = 'https://34.27.27.160/dummy/';
+    final response = await http.post(Uri.parse(url + vinId),
+        headers: {'Access-Control-Allow-Origin': '*'});
 
-    // if (response.statusCode == 200) {
-    // print(response);
+    if (response.statusCode == 200) {
+    print(response);
     return true;
-    // } else {
-    //   throw Exception('Failed to load album');
-    // }
+    } else {
+      throw Exception('Failed to load album');
+    }
   }
 }
 
