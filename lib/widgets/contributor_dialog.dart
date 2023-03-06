@@ -25,17 +25,20 @@ class _ContributorDialogState extends State<ContributorDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       width: MediaQuery.of(context).size.width * 0.69,
       height: MediaQuery.of(context).size.height * 0.39,
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: const LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
-            Colors.deepPurple,
-            Colors.black,
-          ])),
+                Colors.deepPurple,
+                Colors.black,
+              ])),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('HALL OF FAME', style: title),
           const SizedBox(
@@ -52,6 +55,25 @@ class _ContributorDialogState extends State<ContributorDialog> {
                   ),
                 );
               }),
+          SizedBox(
+            height: 200,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/Duy.png'),
+                SizedBox(
+                  width: 10,
+                ),
+                Image.asset(
+                  'assets/Cao.png',
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Image.asset('assets/Bao.png')
+              ],
+            ),
+          ),
         ],
       ),
     );
