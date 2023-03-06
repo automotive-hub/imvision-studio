@@ -67,10 +67,10 @@ class _CoreScreenState extends State<CoreScreen> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.69,
-                      height: MediaQuery.of(context).size.height * 0.39,
-                      child: ContributorDialog());
+                  return AlertDialog(
+                    backgroundColor: Colors.transparent,
+                    content: ContributorDialog(),
+                  );
                 });
           },
           icon: const Icon(Icons.info)),

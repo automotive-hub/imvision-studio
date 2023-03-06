@@ -38,7 +38,7 @@ class _BoxContentDownloadWidgetState extends State<BoxContentDownloadWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                  margin: const EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10, left: 5),
                   color: Colors.deepPurple,
                   child: Text(
                     widget.firstTitle,

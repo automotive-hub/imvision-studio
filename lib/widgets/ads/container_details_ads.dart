@@ -28,7 +28,7 @@ class _ContainerDetailsAdsState extends State<ContainerDetailsAds> {
         width: double.infinity,
         height: double.infinity,
         // padding: const EdgeInsets.symmetric(horizontal: 10),
-        margin: const EdgeInsets.only(right: 10),
+        margin: const EdgeInsets.only(right: 10, top: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
@@ -39,20 +39,18 @@ class _ContainerDetailsAdsState extends State<ContainerDetailsAds> {
           children: [
             Container(
               width: 170,
-              margin: const EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5, left: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: colorsForceBackgroundTitle.withOpacity(0.5),
               ),
               child: Align(
                 alignment: Alignment.center,
-                child: Text(
-                  widget.title,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white)
-                ),
+                child: Text(widget.title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white)),
               ),
             ),
             const SizedBox(
